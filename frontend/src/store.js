@@ -10,6 +10,9 @@ export const useStore = create((set, get) => ({
   nodes: [],
   edges: [],
   currentPipelineId: null,
+  isAuthModalOpen: false,
+  setNodes: (nodes) => set({ nodes }),
+  setEdges: (edges) => set({ edges }),
   getNodeID: (type) => {
     const newIDs = { ...get().nodeIDs };
     if (newIDs[type] === undefined) {
@@ -93,5 +96,5 @@ export const useStore = create((set, get) => ({
   },
   setPipelineId: (id) => set({ currentPipelineId: id }),
   setNodesAndEdges: (nodes, edges) => set({ nodes, edges }),
-
+  setAuthModalOpen: (isOpen) => set({ isAuthModalOpen: isOpen }),
 }));

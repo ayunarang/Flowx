@@ -4,7 +4,7 @@ import DownloadButton from "./DownloadButton";
 import { SavePipelineButton } from "./SavePipelineButton";
 import ShareButton from "./ShareButton";
 
-export const HeaderBar = ({reactFlowWrapper}) => {
+export const HeaderBar = ({ reactFlowWrapper }) => {
     const { user } = useAuth();
 
     const getInitial = () => {
@@ -14,22 +14,24 @@ export const HeaderBar = ({reactFlowWrapper}) => {
 
     return (
         <div className="absolute top-4 right-14 z-20 flex items-center gap-4 bg-white px-4 py-2 rounded-full shadow-md">
-            <button className="px-4 py-1 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700">
-                Dashboard
-            </button>
+            {
+                user && <button className="px-4 py-1 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700">
+                    Dashboard
+                </button>
+            }
 
-            <SavePipelineButton/>
 
-            <ShareButton/>
+            <SavePipelineButton />
+
+            <ShareButton />
 
             {/* <button className="px-4 py-1 rounded-full bg-green-600 text-white font-semibold hover:bg-green-700">
                 Download
             </button> */}
-            <DownloadButton flowRef={reactFlowWrapper}/>
+            <DownloadButton flowRef={reactFlowWrapper} />
 
             {user && (
                 <div className="relative flex items-center gap-2">
-                    {/* Avatar with hover tooltip */}
                     <div className="group relative">
                         <div className="w-8 h-8 rounded-full bg-blue-200 flex items-center justify-center font-bold text-blue-700 cursor-default">
                             {getInitial()}

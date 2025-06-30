@@ -11,10 +11,6 @@ export default function ShareModal({ isOpen, onClose }) {
 
     if (!isOpen) return null;
 
-    console.log(pipelineId)
-
-
-
     const handleShare = async () => {
         const { data: user, error: userError } = await supabase
             .from("users")
@@ -43,6 +39,13 @@ export default function ShareModal({ isOpen, onClose }) {
         const shareLink = `${window.location.origin}/share/${share_token}`;
         setLink(shareLink);
     };
+
+    const closeModal = () => {
+        setEmail('')
+        setLink('')
+        setAccess('view')
+        onClose();
+    }
 
 
     return (
@@ -92,7 +95,7 @@ export default function ShareModal({ isOpen, onClose }) {
                 )}
 
                 <button
-                    onClick={onClose}
+                    onClick={closeModal}
                     className="mt-4 px-4 py-2 bg-gray-300 rounded"
                 >
                     Close

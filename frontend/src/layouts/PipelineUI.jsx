@@ -13,6 +13,11 @@ import { MathNode } from "../nodes/MathNode";
 import { ConstantNode } from "../nodes/ConstantNode";
 import { APINode } from "../nodes/ApiNode";
 import { AuthNode } from "../nodes/AuthNode";
+import { useLocalDraftAutosave } from "../hooks/useLocalDraftAutosave";
+import useAuth from "../hooks/useAuth";
+import useLocalReload from "../hooks/useLocalReload";
+import { useParams } from "react-router-dom";
+import usePipelineLoad from "../hooks/usePipelineLoad";
 
 const gridSize = 20;
 const proOptions = { hideAttribution: true };
@@ -38,7 +43,7 @@ const selector = (state) => ({
   onConnect: state.onConnect,
 });
 
-export const PipelineUI = ({reactFlowWrapper}) => {
+export const PipelineUI = ({ reactFlowWrapper }) => {
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const {
     nodes,
@@ -96,39 +101,47 @@ export const PipelineUI = ({reactFlowWrapper}) => {
     event.dataTransfer.dropEffect = "move";
   }, []);
 
+  const { user } = useAuth();
+  const { id: pipelineId } = useParams();
+
+  usePipelineLoad({ pipelineId });
+  useLocalReload({ user, pipelineId });
+  useLocalDraftAutosave({ nodes, edges, user, pipelineId, delay: 5000 });
+
+
   return (
-      <div ref={reactFlowWrapper} style={{ width: "100wv", height: "100vh" }} className="bg-[#f7f7f7]">
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onConnect={onConnect}
-          onDrop={onDrop}
-          onDragOver={onDragOver}
-          onInit={setReactFlowInstance}
-          nodeTypes={nodeTypes}
-          proOptions={proOptions}
-          snapGrid={[gridSize, gridSize]}
-          connectionLineType="smoothstep"
-          isValidConnection={(connection) => {
-            const sourceNode = getNodeById(connection.source);
-            const targetNode = getNodeById(connection.target);
-            const targetHandle = connection.targetHandle;
+    <div ref={reactFlowWrapper} style={{ width: "100wv", height: "100vh" }} className="bg-[#f7f7f7]">
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        onDrop={onDrop}
+        onDragOver={onDragOver}
+        onInit={setReactFlowInstance}
+        nodeTypes={nodeTypes}
+        proOptions={proOptions}
+        snapGrid={[gridSize, gridSize]}
+        connectionLineType="smoothstep"
+        isValidConnection={(connection) => {
+          const sourceNode = getNodeById(connection.source);
+          const targetNode = getNodeById(connection.target);
+          const targetHandle = connection.targetHandle;
 
-            if (targetNode?.type === "text") {
-              const match = targetHandle?.match(/-([a-zA-Z0-9_$]+-\d+)$/);
-              const expectedVariable = match?.[1];
-              return sourceNode?.data?.name === expectedVariable;
-            }
+          if (targetNode?.type === "text") {
+            const match = targetHandle?.match(/-([a-zA-Z0-9_$]+-\d+)$/);
+            const expectedVariable = match?.[1];
+            return sourceNode?.data?.name === expectedVariable;
+          }
 
-            return true;
-          }}
-        >
-          <Background gap={gridSize} variant="dots" color="#060606" />
-          <Controls position="top-right"  className="no-export" />
-          <MiniMap  position="bottom-right"  className="no-export" />
-        </ReactFlow>
-      </div>
+          return true;
+        }}
+      >
+        <Background gap={gridSize} variant="dots" color="#060606" />
+        <Controls position="top-right" className="no-export" />
+        <MiniMap position="bottom-right" className="no-export" />
+      </ReactFlow>
+    </div>
   );
 };

@@ -16,6 +16,12 @@ export default function AuthModal({ isOpen, onClose }) {
       setMessage('Check your email for your magic link!');
     }
     setLoading(false);
+
+    setTimeout(() => {
+      setEmail('');
+      setMessage('');
+      onClose();
+    }, 300);
   };
 
   if (!isOpen) return null;
