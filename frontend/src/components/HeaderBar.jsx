@@ -1,9 +1,10 @@
 import useAuth from "../hooks/useAuth";
 import AuthButton from "./AuthButton";
+import DownloadButton from "./DownloadButton";
 import { SavePipelineButton } from "./SavePipelineButton";
 import ShareButton from "./ShareButton";
 
-export const HeaderBar = () => {
+export const HeaderBar = ({reactFlowWrapper}) => {
     const { user } = useAuth();
 
     const getInitial = () => {
@@ -21,9 +22,10 @@ export const HeaderBar = () => {
 
             <ShareButton/>
 
-            <button className="px-4 py-1 rounded-full bg-green-600 text-white font-semibold hover:bg-green-700">
+            {/* <button className="px-4 py-1 rounded-full bg-green-600 text-white font-semibold hover:bg-green-700">
                 Download
-            </button>
+            </button> */}
+            <DownloadButton flowRef={reactFlowWrapper}/>
 
             {user && (
                 <div className="relative flex items-center gap-2">

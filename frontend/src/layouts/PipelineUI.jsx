@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useCallback } from "react";
 import ReactFlow, { Controls, Background, MiniMap } from "reactflow";
 import { useStore } from "../store";
 import { shallow } from "zustand/shallow";
@@ -38,8 +38,7 @@ const selector = (state) => ({
   onConnect: state.onConnect,
 });
 
-export const PipelineUI = () => {
-  const reactFlowWrapper = useRef(null);
+export const PipelineUI = ({reactFlowWrapper}) => {
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const {
     nodes,
@@ -98,7 +97,6 @@ export const PipelineUI = () => {
   }, []);
 
   return (
-    <>
       <div ref={reactFlowWrapper} style={{ width: "100wv", height: "100vh" }} className="bg-[#f7f7f7]">
         <ReactFlow
           nodes={nodes}
@@ -128,10 +126,9 @@ export const PipelineUI = () => {
           }}
         >
           <Background gap={gridSize} variant="dots" color="#060606" />
-          <Controls position="top-right"/>
-          <MiniMap  position="bottom-right"/>
+          <Controls position="top-right"  className="no-export" />
+          <MiniMap  position="bottom-right"  className="no-export" />
         </ReactFlow>
       </div>
-    </>
   );
 };
