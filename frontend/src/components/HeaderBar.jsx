@@ -1,5 +1,7 @@
 import useAuth from "../hooks/useAuth";
 import AuthButton from "./AuthButton";
+import { SavePipelineButton } from "./SavePipelineButton";
+import ShareButton from "./ShareButton";
 
 export const HeaderBar = () => {
     const { user } = useAuth();
@@ -15,9 +17,9 @@ export const HeaderBar = () => {
                 Dashboard
             </button>
 
-            <button className="px-4 py-1 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700">
-                Share
-            </button>
+            <SavePipelineButton/>
+
+            <ShareButton/>
 
             <button className="px-4 py-1 rounded-full bg-green-600 text-white font-semibold hover:bg-green-700">
                 Download
@@ -25,6 +27,7 @@ export const HeaderBar = () => {
 
             {user && (
                 <div className="relative flex items-center gap-2">
+                    {/* Avatar with hover tooltip */}
                     <div className="group relative">
                         <div className="w-8 h-8 rounded-full bg-blue-200 flex items-center justify-center font-bold text-blue-700 cursor-default">
                             {getInitial()}

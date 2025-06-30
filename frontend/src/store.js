@@ -1,4 +1,3 @@
-
 import { create } from "zustand";
 import {
   addEdge,
@@ -10,6 +9,7 @@ import {
 export const useStore = create((set, get) => ({
   nodes: [],
   edges: [],
+  currentPipelineId: null,
   getNodeID: (type) => {
     const newIDs = { ...get().nodeIDs };
     if (newIDs[type] === undefined) {
@@ -48,8 +48,8 @@ export const useStore = create((set, get) => ({
             color: "#302d34",
           },
           style: {
-            stroke: "#302d34", 
-            strokeWidth: 1, 
+            stroke: "#302d34",
+            strokeWidth: 1,
             strokeDasharray: "15 4",
           },
         },
@@ -84,11 +84,14 @@ export const useStore = create((set, get) => ({
           style: {
             stroke: "#302d34",
             strokeWidth: 1,
-            strokeDasharray: "15 4", 
+            strokeDasharray: "15 4",
           },
         },
         get().edges
       ),
     });
   },
+  setPipelineId: (id) => set({ currentPipelineId: id }),
+  setNodesAndEdges: (nodes, edges) => set({ nodes, edges }),
+
 }));
