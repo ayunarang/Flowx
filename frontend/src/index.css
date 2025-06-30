@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+input , select, textarea {
+  @apply border border-gray-100 rounded px-2 py-1 outline-none focus:ring-1 focus:ring-gray-300 font-normal w-full text-lg;
+}
+
+label{
+    @apply uppercase text-xs mb-1 font-medium;
+}
+
+
+.handle-styles {
+  @apply w-3 h-3 bg-green-500 border-2 border-white rounded-full;
+  width: 0.65rem !important;
+  height: 0.65rem !important;
+  background-color: #302d34 !important;
+  border-radius: 100% !important;
+}
+
+.toolbar-node {
+    @apply cursor-grab min-w-10 flex items-center justify-center flex-col rounded-md bg-white text-black border-black border px-3 py-2 text-xl font-medium
+}
+
