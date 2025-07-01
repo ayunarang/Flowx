@@ -23,14 +23,22 @@ export const SavePipelineButton = ({ shareToken }) => {
   };
 
   return (
-    <div className="flex justify-center align-middle">
+    <div className="flex justify-center items-center">
       <button
         type="button"
         onClick={handleSave}
-        className="bg-[#1e1e28] text-white text-base font-medium px-3 py-2 rounded-md w-full shadow-subtle active:bg-[#292933] z-10"
+        className="
+          bg-[#1e1e28] text-white
+          text-[10px] sm:text-sm
+          font-medium
+          px-2 py-1 sm:px-2 sm:py-1
+          rounded-md w-full
+          shadow-subtle active:bg-[#292933] z-10
+        "
       >
         {shareToken ? "Save As New" : "Save"}
       </button>
     </div>
   );
 };
+

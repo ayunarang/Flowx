@@ -8,25 +8,27 @@ import CalculateIcon from "@mui/icons-material/Calculate";
 import HttpIcon from "@mui/icons-material/Http";
 import ShapeLineIcon from "@mui/icons-material/ShapeLine";
 
-export const getIconForType = (type) => {
+export const getIconForType = (type, size = 24) => {
+  const iconProps = { style: { fontSize: size } };
+
   switch (type) {
     case "customInput":
-      return <LoginIcon  />;
+      return <LoginIcon {...iconProps} />;
     case "text":
-      return <TextFieldsIcon />;
+      return <TextFieldsIcon {...iconProps} />;
     case "operation":
-      return <CalculateIcon  />;
+      return <CalculateIcon {...iconProps} />;
     case "api":
-      return <HttpIcon />;
+      return <HttpIcon {...iconProps} />;
     case "customOutput":
-      return <LogoutIcon  />;
+      return <LogoutIcon {...iconProps} />;
     case "auth":
-      return <SecurityIcon/>;
+      return <SecurityIcon {...iconProps} />;
     case "llm":
-      return <ShapeLineIcon />;
+      return <ShapeLineIcon {...iconProps} />;
     case "constant":
-      return <CopyrightIcon />;
+      return <CopyrightIcon {...iconProps} />;
     default:
-      return <HelpOutlineIcon/>;
+      return <HelpOutlineIcon {...iconProps} />;
   }
 };

@@ -1,8 +1,7 @@
-// draggableNode.js
 
 import { getIconForType } from "../utils/getIcon";
 
-export const DraggableNode = ({ type, label }) => {
+export const DraggableNode = ({ type, label, collapsed = false }) => {
   const onDragStart = (event, nodeType) => {
     const appData = { nodeType };
     event.target.style.cursor = "grabbing";
@@ -14,19 +13,33 @@ export const DraggableNode = ({ type, label }) => {
   };
 
   return (
-<div
-  className="cursor-grab min-w-10 flex items-center justify-center flex-col rounded-md bg-white text-black border-gray-200 border px-2 py-1.5 text-sm font-medium shadow-subtle "
-  onDragStart={(event) => onDragStart(event, type)}
-  onDragEnd={(event) => (event.target.style.cursor = 'grab')}
-  draggable
->
-  <div className="flex items-center self-start space-x-2">
-    <div className="w-3 h-3 flex items-center justify-center border border-gray-300 rounded-md p-4">
-      {getIconForType(type)}
-    </div>
-    <span className="leading-none">{label}</span>
-  </div>
-</div>
+    <div
+      className={`
+    cursor-grab
+    flex ${collapsed ? "flex-col items-center justify-center" : "flex-row items-center"}
+    rounded-md sm:border sm:border-gray-200 sm:gap-2 gap-0.5
+    bg-white text-black
+    ${collapsed
+          ? 'sm:p-0 py-1 px-1.5 w-full sm:w-fit text-center'
+          : 'p-1.5 sm:min-w-fit'
+        }
+    text-xs font-medium sm:shadow-subtle
+  `}
 
+
+      onDragStart={(event) => onDragStart(event, type)}
+      onDragEnd={(event) => (event.target.style.cursor = 'grab')}
+      draggable
+    >
+      <div className={` flex items-center justify-center border border-gray-300 rounded-md ${collapsed ? 'p-1 sm:p-2' : 'p-1'}`}>
+        {collapsed ? getIconForType(type, 20) : getIconForType(type, 16)}
+      </div>
+      {collapsed ? (
+        <span className="text-[8px] sm:text-xs text-center sm:hidden whitespace-nowrap">{label}</span>
+      ) : (
+        <span className="leading-none break-words">{label}</span>
+      )}
+    </div>
   );
 };
+

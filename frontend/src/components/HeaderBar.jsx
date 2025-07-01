@@ -20,7 +20,7 @@ export const HeaderBar = ({ reactFlowWrapper }) => {
     };
 
     return (
-        <div className="absolute top-4 right-14 z-20 flex items-center gap-4 bg-white px-4 py-2 rounded-full shadow-md">
+        <div className="absolute top-4 right-14 z-20 flex items-center gap-2 bg-white sm:px-5 px-3 py-1.5 rounded-full shadow-md">
             {user && (
                 <>
                     {canEdit &&
@@ -38,7 +38,12 @@ export const HeaderBar = ({ reactFlowWrapper }) => {
                             />
                         </>}
 
-                    <button className="px-4 py-1 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700">
+                    <button className="bg-[#1e1e28] text-white
+          text-[10px] sm:text-sm
+          font-medium
+          px-2 py-1 sm:px-2 sm:py-1
+          rounded-md w-full
+          shadow-subtle active:bg-[#292933] z-10">
                         Dashboard
                     </button>
                 </>

@@ -15,9 +15,7 @@ export default function ShareButton() {
       setAuthModalOpen(true);
       return;
     }
-
     await savePipeline(user);
-
     setShowModal(true);
   };
 
@@ -25,15 +23,19 @@ export default function ShareButton() {
     <>
       <button
         onClick={handleShare}
-        className="px-3 py-1 bg-green-600 text-white rounded"
+        className="
+          bg-green-600 text-white
+          rounded
+          text-[10px]  sm:text-sm
+          font-medium
+          px-2 py-1 sm:px-2 sm:py-1
+        "
       >
         Share
       </button>
 
-      <ShareModal
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-      />
+      <ShareModal isOpen={showModal} onClose={() => setShowModal(false)} />
     </>
   );
 }
+

@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import ReactFlow, { Controls, Background, MiniMap } from "reactflow";
 import { useStore } from "../store";
 import { shallow } from "zustand/shallow";
@@ -6,7 +6,6 @@ import { InputNode } from "../nodes/InputNode";
 import { LLMNode } from "../nodes/LlmNode";
 import { OutputNode } from "../nodes/OutputNode";
 import { TextNode } from "../nodes/TextNode";
-import "reactflow/dist/style.css";
 import { ConditionNode } from "../nodes/ConditionNode";
 import { MathNode } from "../nodes/MathNode";
 import { ConstantNode } from "../nodes/ConstantNode";
@@ -18,6 +17,8 @@ import { useParams } from "react-router-dom";
 import { useAutoSavePipeline } from "../hooks/useAutoSave";
 import usePipelineLoad from "../hooks/usePipelineLoad";
 import { useClearPipelineOnInvalidRoute } from "../hooks/useClearPipelineOnInvalidRoute";
+
+import "reactflow/dist/style.css";
 
 const gridSize = 20;
 const proOptions = { hideAttribution: true };
@@ -45,6 +46,7 @@ const selector = (state) => ({
 
 export const PipelineUI = ({ reactFlowWrapper }) => {
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
+
   const {
     nodes,
     edges,
@@ -56,8 +58,7 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
   } = useStore(selector, shallow);
 
   const getInitNodeData = (nodeID, type) => {
-    let nodeData = { id: nodeID, name: nodeID, nodeType: `${type}` };
-    return nodeData;
+    return { id: nodeID, name: nodeID, nodeType: `${type}` };
   };
 
   const getNodeById = (id) => nodes.find((n) => n.id === id);
@@ -65,33 +66,28 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
   const onDrop = useCallback(
     (event) => {
       event.preventDefault();
-
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-      if (event?.dataTransfer?.getData("application/reactflow")) {
-        const appData = JSON.parse(
-          event.dataTransfer.getData("application/reactflow")
-        );
-        const type = appData?.nodeType;
+      const data = event?.dataTransfer?.getData("application/reactflow");
+      if (!data) return;
 
-        if (typeof type === "undefined" || !type) {
-          return;
-        }
+      const appData = JSON.parse(data);
+      const type = appData?.nodeType;
+      if (!type) return;
 
-        const position = reactFlowInstance.project({
-          x: event.clientX - reactFlowBounds.left,
-          y: event.clientY - reactFlowBounds.top,
-        });
+      const position = reactFlowInstance.project({
+        x: event.clientX - reactFlowBounds.left,
+        y: event.clientY - reactFlowBounds.top,
+      });
 
-        const nodeID = getNodeID(type);
-        const newNode = {
-          id: nodeID,
-          type,
-          position,
-          data: getInitNodeData(nodeID, type),
-        };
+      const nodeID = getNodeID(type);
+      const newNode = {
+        id: nodeID,
+        type,
+        position,
+        data: getInitNodeData(nodeID, type),
+      };
 
-        addNode(newNode);
-      }
+      addNode(newNode);
     },
     [reactFlowInstance]
   );
@@ -105,14 +101,36 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
   const { id: pipelineId, token: shareToken } = useParams();
 
   useClearPipelineOnInvalidRoute();
-
   useAutoSavePipeline({ nodes, edges, user, pipelineId, delay: 5000, shareToken });
   usePipelineLoad({ pipelineId, shareToken });
-
   usePipelineSaveBeforeSignin({ user, pipelineId, delay: 3000, shareToken });
 
+  useEffect(() => {
+    const handleResize = () => {
+      reactFlowInstance?.fitView({ padding: 0.8 }); // not 3!
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [reactFlowInstance]);
+
+  useEffect(() => {
+    if (reactFlowInstance && nodes.length) {
+      reactFlowInstance.fitView({ padding: 0.8 });
+    }
+  }, [reactFlowInstance, nodes]);
+
+  const getMinZoom = () => {
+    const width = window.innerWidth;
+    if (width < 480) return 0.22;   
+    if (width < 768) return 0.3;   
+    return 0.5;                   
+  };
+
   return (
-    <div ref={reactFlowWrapper} style={{ width: "100wv", height: "100vh" }} className="bg-[#f7f7f7]">
+    <div
+      ref={reactFlowWrapper}
+      className="w-screen h-screen overflow-hidden relative"
+    >
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -121,11 +139,16 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
         onConnect={onConnect}
         onDrop={onDrop}
         onDragOver={onDragOver}
-        onInit={setReactFlowInstance}
+        onInit={(instance) => {
+          setReactFlowInstance(instance);
+          instance.fitView({ padding: 0.8 }); 
+        }}
         nodeTypes={nodeTypes}
         proOptions={proOptions}
         snapGrid={[gridSize, gridSize]}
         connectionLineType="smoothstep"
+        minZoom={getMinZoom()}
+        maxZoom={4}
         isValidConnection={(connection) => {
           const sourceNode = getNodeById(connection.source);
           const targetNode = getNodeById(connection.target);
@@ -142,7 +165,7 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
       >
         <Background gap={gridSize} variant="dots" color="#060606" />
         <Controls position="top-right" className="no-export" />
-        <MiniMap position="bottom-right" className="no-export" />
+        <MiniMap position="bottom-right" className="no-export hidden md:block" />
       </ReactFlow>
     </div>
   );

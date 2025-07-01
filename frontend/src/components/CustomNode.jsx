@@ -13,18 +13,32 @@ export const CustomNode = ({ data, title, content, handles }) => {
   };
 
   return (
-    <div className="bg-white min-w-72 max-w-md h-auto rounded-xl border-white border shadow-deep">
-      <div className="ml-3 my-3">
+    <div
+      className="
+    bg-white
+    w-[clamp(280px,50vw,300px)]
+    rounded-xl border shadow-deep 
+    p-4 
+    text-[clamp(0.75rem,1vw,1rem)]
+  "
+    >
+      <div className="mb-2">
         <span className="text-xl font-medium">{title}</span>
       </div>
-      <div className="bg-[#f0f0f0] p-2.5 mx-3 mb-4 rounded-lg text-lg">
+      <div className="bg-[#f0f0f0] p-3 rounded-lg text-lg">
         <div className="flex flex-col gap-3">
           <div className="flex flex-col">
-            <label>Name</label>
-
-            <input type="text" value={currName} onChange={handleNameChange} />
+            <label htmlFor={`node-${data.id}`} className="text-sm mb-1">
+              Name
+            </label>
+            <input
+              id={`node-${data.id}`}
+              type="text"
+              value={currName}
+              onChange={handleNameChange}
+              className="px-2 py-1 rounded border"
+            />
           </div>
-
           {content}
         </div>
       </div>

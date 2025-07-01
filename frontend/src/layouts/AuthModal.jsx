@@ -42,14 +42,14 @@ export default function AuthModal({ isOpen, onClose }) {
       aria-modal="true"
       aria-labelledby="auth-modal-title"
     >
-      <div className="bg-white rounded-lg p-6 w-80">
+      <div className="bg-white rounded-lg md:p-6 p-3 md:w-80 w-60">
         <h2 id="auth-modal-title" className="text-lg font-bold mb-4">
           Sign In
         </h2>
         <form onSubmit={handleSignIn} className="space-y-4">
           <input
             type="email"
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border border-gray-400 px-3 py-2 rounded md:text-base text-sm"
             placeholder="you@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
