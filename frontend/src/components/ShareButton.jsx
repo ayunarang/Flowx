@@ -3,6 +3,7 @@ import ShareModal from '../layouts/ShareModal';
 import useAuth from '../hooks/useAuth';
 import { useStore } from '../store';
 import { useSavePipeline } from '../hooks/useSavePipeline';
+import {Share2Icon} from 'lucide-react'
 
 export default function ShareButton() {
   const [showModal, setShowModal] = useState(false);
@@ -28,10 +29,13 @@ export default function ShareButton() {
           rounded
           text-[10px]  sm:text-sm
           font-medium
-          px-2 py-1 sm:px-2 sm:py-1
+          px-2 py-1 sm:px-2 sm:py-1 flex items-center gap-1
         "
       >
-        Share
+         <span className="text-lg">
+            <Share2Icon height={14} width={14} />
+          </span>
+          <span className="hidden md:block">Share</span>
       </button>
 
       <ShareModal isOpen={showModal} onClose={() => setShowModal(false)} />

@@ -13,7 +13,7 @@ export default function AuthModal({ isOpen, onClose }) {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: window.location.href, 
+        emailRedirectTo: window.location.href,
       },
     });
 
@@ -42,7 +42,7 @@ export default function AuthModal({ isOpen, onClose }) {
       aria-modal="true"
       aria-labelledby="auth-modal-title"
     >
-      <div className="bg-white rounded-lg md:p-6 p-3 md:w-80 w-60">
+      <div className="bg-white rounded-xl sm:rounded-lg md:p-6 p-3 md:w-80 w-60">
         <h2 id="auth-modal-title" className="text-lg font-bold mb-4">
           Sign In
         </h2>
@@ -57,7 +57,7 @@ export default function AuthModal({ isOpen, onClose }) {
           />
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white px-3 py-2 rounded"
+            className="w-full bg-canvaPurple hover:bg-canvaPurple-hover active:bg-canvaPurple-active text-white px-3 py-2 rounded font-medium"
             disabled={loading}
           >
             {loading ? "Sending..." : "Send Magic Link"}
@@ -68,7 +68,7 @@ export default function AuthModal({ isOpen, onClose }) {
         )}
         <button
           onClick={onClose}
-          className="mt-4 text-sm text-gray-500 hover:underline"
+          className="mt-4 text-sm text-gray-800 bg-gray-100 md:px-3 md:py-2 px-2 py-1 rounded-lg active:bg-gray-200"
         >
           Cancel
         </button>

@@ -30,7 +30,7 @@ export default function AuthButton() {
             bg-gray-700 text-white rounded
           text-[10px] sm:text-sm
           font-medium
-          px-2 py-1 sm:px-2 sm:py-1          "
+          px-2 py-1 sm:px-2 sm:py-1  w-full   max-w-fit       "
         >
           Sign Out
         </button>
@@ -41,7 +41,7 @@ export default function AuthButton() {
             bg-blue-600 text-white rounded
             sm:text-sm text-[10px]
           font-medium
-          px-2 py-1 sm:px-2 sm:py-1          "
+          px-2 py-1 sm:px-2 sm:py-1  w-full max-w-fit        "
         >
           Sign In
         </button>

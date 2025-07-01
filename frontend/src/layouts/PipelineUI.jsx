@@ -57,10 +57,7 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
     onConnect,
   } = useStore(selector, shallow);
 
-  const getInitNodeData = (nodeID, type) => {
-    return { id: nodeID, name: nodeID, nodeType: `${type}` };
-  };
-
+  const getInitNodeData = (nodeID, type) => ({ id: nodeID, name: nodeID, nodeType: type });
   const getNodeById = (id) => nodes.find((n) => n.id === id);
 
   const onDrop = useCallback(
@@ -99,32 +96,39 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
 
   const { user } = useAuth();
   const { id: pipelineId, token: shareToken } = useParams();
+  const [hasFitView, setHasFitView] = useState(false);
+
 
   useClearPipelineOnInvalidRoute();
   useAutoSavePipeline({ nodes, edges, user, pipelineId, delay: 5000, shareToken });
   usePipelineLoad({ pipelineId, shareToken });
   usePipelineSaveBeforeSignin({ user, pipelineId, delay: 3000, shareToken });
 
+  const getMinZoom = () => {
+    const width = window.innerWidth;
+    if (width < 480) return 0.22;
+    if (width < 768) return 0.3;
+    return 0.5;
+  };
+
   useEffect(() => {
     const handleResize = () => {
-      reactFlowInstance?.fitView({ padding: 0.8 }); // not 3!
+      if (reactFlowInstance && nodes.length > 0) {
+        reactFlowInstance.fitView({ padding: 0.8, minZoom: getMinZoom() });
+      }
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [reactFlowInstance]);
-
-  useEffect(() => {
-    if (reactFlowInstance && nodes.length) {
-      reactFlowInstance.fitView({ padding: 0.8 });
-    }
   }, [reactFlowInstance, nodes]);
 
-  const getMinZoom = () => {
-    const width = window.innerWidth;
-    if (width < 480) return 0.22;   
-    if (width < 768) return 0.3;   
-    return 0.5;                   
-  };
+
+  useEffect(() => {
+    if (reactFlowInstance && nodes.length > 0 && !hasFitView) {
+      reactFlowInstance.fitView({ padding: 0.8, minZoom: getMinZoom() });
+      setHasFitView(true);
+    }
+  }, [reactFlowInstance, nodes, hasFitView]);
+
 
   return (
     <div
@@ -139,10 +143,8 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
         onConnect={onConnect}
         onDrop={onDrop}
         onDragOver={onDragOver}
-        onInit={(instance) => {
-          setReactFlowInstance(instance);
-          instance.fitView({ padding: 0.8 }); 
-        }}
+        onInit={setReactFlowInstance}
+
         nodeTypes={nodeTypes}
         proOptions={proOptions}
         snapGrid={[gridSize, gridSize]}
@@ -164,7 +166,7 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
         }}
       >
         <Background gap={gridSize} variant="dots" color="#060606" />
-        <Controls position="top-right" className="no-export" />
+        <Controls position="top-right" className="no-export" style={{ top: "4rem" }} />
         <MiniMap position="bottom-right" className="no-export hidden md:block" />
       </ReactFlow>
     </div>
