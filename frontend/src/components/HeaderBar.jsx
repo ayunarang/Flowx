@@ -1,4 +1,5 @@
 import useAuth from "../hooks/useAuth";
+import { useStore } from "../store";
 import AuthButton from "./AuthButton";
 import DownloadButton from "./DownloadButton";
 import { SavePipelineButton } from "./SavePipelineButton";
@@ -6,6 +7,12 @@ import ShareButton from "./ShareButton";
 
 export const HeaderBar = ({ reactFlowWrapper }) => {
     const { user } = useAuth();
+    const currentPipelineName = useStore((state) => state.currentPipelineName);
+    const setCurrentPipelineName = useStore((state) => state.setCurrentPipelineName);
+    const isAutoSaved = useStore((state) => state.isAutoSaved);
+    const canEdit = useStore((state) => state.canEdit);
+
+
 
     const getInitial = () => {
         if (user?.email) return user.email.charAt(0).toUpperCase();
@@ -14,20 +21,31 @@ export const HeaderBar = ({ reactFlowWrapper }) => {
 
     return (
         <div className="absolute top-4 right-14 z-20 flex items-center gap-4 bg-white px-4 py-2 rounded-full shadow-md">
-            {
-                user && <button className="px-4 py-1 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700">
-                    Dashboard
-                </button>
-            }
+            {user && (
+                <>
+                    {canEdit &&
+                        <>
+                            <p className={`ml-2 text-sm font-medium ${isAutoSaved ? "text-blue-600" : "text-gray-400"}`}>
+                                {isAutoSaved ? "Auto-saved" : "Idle"}
+                            </p>
 
+                            <input
+                                type="text"
+                                value={currentPipelineName}
+                                onChange={(e) => setCurrentPipelineName(e.target.value)}
+                                placeholder="Pipeline name"
+                                className="font-semibold px-2 py-1 border-b border-gray-400 focus:outline-none focus:border-blue-600 bg-transparent"
+                            />
+                        </>}
 
-            <SavePipelineButton />
+                    <button className="px-4 py-1 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700">
+                        Dashboard
+                    </button>
+                </>
+            )}
 
-            <ShareButton />
-
-            {/* <button className="px-4 py-1 rounded-full bg-green-600 text-white font-semibold hover:bg-green-700">
-                Download
-            </button> */}
+            {canEdit && <SavePipelineButton />}
+            {canEdit && <ShareButton />}
             <DownloadButton flowRef={reactFlowWrapper} />
 
             {user && (
@@ -40,11 +58,10 @@ export const HeaderBar = ({ reactFlowWrapper }) => {
                             {user.email}
                         </div>
                     </div>
-
                 </div>
             )}
-            <AuthButton />
 
+            <AuthButton />
         </div>
     );
 };

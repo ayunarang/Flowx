@@ -12,41 +12,54 @@ export default function ShareModal({ isOpen, onClose }) {
     if (!isOpen) return null;
 
     const handleShare = async () => {
-        const { data: user, error: userError } = await supabase
-            .from("users")
-            .select("id")
-            .eq("email", email)
-            .single();
+        if (!pipelineId) {
+            alert("No pipeline ID found. Please save your pipeline first.");
+            return;
+        }
+
+        if (!email.trim()) {
+            alert("Please enter a valid recipient email.");
+            return;
+        }
+
+        if (!["view", "edit"].includes(access)) {
+            alert("Invalid access level.");
+            return;
+        }
 
         const share_token = crypto.randomUUID();
 
-        if (user) {
-            await supabase.from("pipeline_shared").insert({
-                pipeline_id: pipelineId,
-                user_id: user.id,
-                access,
-                share_token
-            });
-        } else {
-            await supabase.from("pipeline_shared").insert({
-                pipeline_id: pipelineId,
-                recipient_email: email,
-                access,
-                share_token
-            });
+        const { data: user, error: userError } = await supabase
+            .from("users")
+            .select("id")
+            .eq("email", email.trim())
+            .maybeSingle();
+
+        const { error: insertError } = await supabase.from("pipeline_shared").insert({
+            pipeline_id: pipelineId,
+            user_id: user?.id || null,
+            recipient_email: user ? null : email.trim(),
+            access,
+            share_token,
+        });
+
+        if (insertError) {
+            console.error("Failed to insert pipeline share:", insertError);
+            alert("Failed to share pipeline.");
+            return;
         }
+
 
         const shareLink = `${window.location.origin}/share/${share_token}`;
         setLink(shareLink);
     };
 
     const closeModal = () => {
-        setEmail('')
-        setLink('')
-        setAccess('view')
+        setEmail('');
+        setAccess('view');
+        setLink('');
         onClose();
-    }
-
+    };
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -66,7 +79,7 @@ export default function ShareModal({ isOpen, onClose }) {
                     onChange={(e) => setAccess(e.target.value)}
                     className="border px-3 py-2 mb-4 w-full"
                 >
-                    <option value="view">View</option>
+                    <option value="view">View Only</option>
                     <option value="edit">Edit</option>
                 </select>
 

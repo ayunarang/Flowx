@@ -1,34 +1,35 @@
 import { useStore } from "../store";
 import { supabase } from "../supabaseClient";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
 
 export const useSavePipeline = () => {
   const nodes = useStore((state) => state.nodes);
   const edges = useStore((state) => state.edges);
   const pipelineId = useStore((state) => state.currentPipelineId);
   const setPipelineId = useStore((state) => state.setPipelineId);
+  const pipelineName = useStore((state) => state.currentPipelineName);
 
-  const navigate = useNavigate();
-
-  const savePipeline = async (user) => {
+  const savePipeline = async (
+    user,
+    { showToast = true, saveAsNew = false } = {}
+  ) => {
     if (!user) {
-      console.error("User not signed in");
+      if (showToast) toast.error("You must be signed in to save.");
       return;
     }
 
     if (nodes.length === 0 && edges.length === 0) {
-      toast.error("No pipeline data to save.");
+      if (showToast) toast.error("Pipeline is empty.");
       return;
     }
 
     try {
-      if (!pipelineId) {
+      if (saveAsNew || !pipelineId) {
         const { data, error } = await supabase
           .from("pipelines")
           .insert({
             owner_id: user.id,
-            name: "My Pipeline",
+            name: pipelineName || "Untitled Pipeline",
             data: { nodes, edges },
             access_level: "public",
           })
@@ -38,23 +39,23 @@ export const useSavePipeline = () => {
         if (error) throw error;
 
         setPipelineId(data.id);
-        navigate(`/pipeline/${data.id}`);
-        toast.success("Pipeline created successfully!");
+
+        window.history.pushState({}, "", `/pipeline/${data.id}`);
+
+        if (showToast) toast.success("Pipeline saved as new!");
       } else {
         const { error } = await supabase
           .from("pipelines")
-          .update({
-            data: { nodes, edges },
-          })
+          .update({ data: { nodes, edges } })
           .eq("id", pipelineId);
 
         if (error) throw error;
 
-        toast.success("Pipeline updated successfully!");
+        if (showToast) toast.success("Pipeline updated!");
       }
     } catch (err) {
-      console.error(err);
-      toast.error("Failed to save pipeline.");
+      console.error("[SavePipeline] Error:", err);
+      if (showToast) toast.error("Pipeline save failed.");
     }
   };
 

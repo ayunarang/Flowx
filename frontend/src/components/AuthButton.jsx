@@ -2,23 +2,28 @@ import { supabase } from '../supabaseClient';
 import useAuth from '../hooks/useAuth';
 import AuthModal from '../layouts/AuthModal';
 import { useStore } from '../store';
-import { useNavigate } from 'react-router-dom';
 
 export default function AuthButton() {
   const { user } = useAuth();
   const setAuthModalOpen = useStore((state) => state.setAuthModalOpen);
   const isAuthModalOpen = useStore((state) => state.isAuthModalOpen);
   const setPipelineId = useStore((state) => state.setPipelineId);
+  const setNodes = useStore((state) => state.setNodes);
+  const setEdges = useStore((state) => state.setEdges);
+  const setCanEdit = useStore((state) => state.setCanEdit); 
 
-  const navigate = useNavigate();
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
 
     setPipelineId(null);
+    setNodes([]);
+    setEdges([]);
+    setCanEdit(true);
 
-    navigate('/');
+    window.location.href = '/';
   };
+
 
   return (
     <>
@@ -37,7 +42,10 @@ export default function AuthButton() {
           Sign In
         </button>
       )}
-      <AuthModal isOpen={isAuthModalOpen} onClose={() => setAuthModalOpen(false)} />
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+      />
     </>
   );
 }

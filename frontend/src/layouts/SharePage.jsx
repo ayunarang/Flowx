@@ -15,7 +15,8 @@ export default function SharePage() {
 
   const [shareRow, setShareRow] = useState(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [canEdit, setCanEdit] = useState(false);
+  const setCanEdit = useStore((state) => state.setCanEdit);
+
 
   useEffect(() => {
     if (!token) return;
@@ -32,16 +33,13 @@ export default function SharePage() {
         return;
       }
 
-      console.log("Loaded shared pipeline:", data);
       setShareRow(data);
 
-      // ✅ Load nodes & edges into Zustand store
       if (data.pipelines?.data) {
         const { nodes, edges } = data.pipelines.data;
         setNodesAndEdges(nodes || [], edges || []);
       }
 
-      // ✅ Auto-claim if the invited user logs in:
       if (
         user &&
         data.user_id === null &&
@@ -55,9 +53,8 @@ export default function SharePage() {
           .eq("id", data.id);
       }
 
-      // ✅ Can edit logic:
       if (data.access === "edit") {
-        setCanEdit(!!user); // true only if signed in
+        setCanEdit(!!user); 
       } else {
         setCanEdit(false);
       }
@@ -71,8 +68,6 @@ export default function SharePage() {
       setShowAuthModal(true);
       return;
     }
-    console.log("Editing enabled for user:", user.email);
-    // You can trigger more actions here if needed.
   };
 
   if (!shareRow) {
@@ -84,7 +79,7 @@ export default function SharePage() {
   return (
     <div className="relative h-screen w-screen">
       <HeaderBar />
-      <PipelineUI readOnly={!canEdit} />
+      <PipelineUI/>
 
       {canRenderToolbar && (
         <div className="absolute top-0 left-0 z-10">

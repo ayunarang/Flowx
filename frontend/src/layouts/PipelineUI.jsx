@@ -6,18 +6,18 @@ import { InputNode } from "../nodes/InputNode";
 import { LLMNode } from "../nodes/LlmNode";
 import { OutputNode } from "../nodes/OutputNode";
 import { TextNode } from "../nodes/TextNode";
-
 import "reactflow/dist/style.css";
 import { ConditionNode } from "../nodes/ConditionNode";
 import { MathNode } from "../nodes/MathNode";
 import { ConstantNode } from "../nodes/ConstantNode";
 import { APINode } from "../nodes/ApiNode";
 import { AuthNode } from "../nodes/AuthNode";
-import { useLocalDraftAutosave } from "../hooks/useLocalDraftAutosave";
+import { usePipelineSaveBeforeSignin } from "../hooks/usePipelineSaveBeforeSignin";
 import useAuth from "../hooks/useAuth";
-import useLocalReload from "../hooks/useLocalReload";
 import { useParams } from "react-router-dom";
+import { useAutoSavePipeline } from "../hooks/useAutoSave";
 import usePipelineLoad from "../hooks/usePipelineLoad";
+import { useClearPipelineOnInvalidRoute } from "../hooks/useClearPipelineOnInvalidRoute";
 
 const gridSize = 20;
 const proOptions = { hideAttribution: true };
@@ -102,12 +102,14 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
   }, []);
 
   const { user } = useAuth();
-  const { id: pipelineId } = useParams();
+  const { id: pipelineId, token: shareToken } = useParams();
 
-  usePipelineLoad({ pipelineId });
-  useLocalReload({ user, pipelineId });
-  useLocalDraftAutosave({ nodes, edges, user, pipelineId, delay: 5000 });
+  useClearPipelineOnInvalidRoute();
 
+  useAutoSavePipeline({ nodes, edges, user, pipelineId, delay: 5000, shareToken });
+  usePipelineLoad({ pipelineId, shareToken });
+
+  usePipelineSaveBeforeSignin({ user, pipelineId, delay: 3000, shareToken });
 
   return (
     <div ref={reactFlowWrapper} style={{ width: "100wv", height: "100vh" }} className="bg-[#f7f7f7]">

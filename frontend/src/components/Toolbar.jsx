@@ -1,7 +1,11 @@
+import { useStore } from "../store";
 import { DraggableNode } from "./DraggableNode";
 
-export const PipelineToolbar = ({ isEditable = true, onEditClick }) => {
-  if (!isEditable) {
+export const PipelineToolbar = ({ onEditClick }) => {
+
+  const canEdit = useStore((state) => state.canEdit);
+
+  if (!canEdit) {
     return null;
   }
 
