@@ -6,6 +6,7 @@ import { Toaster } from 'sonner';
 import SharePage from "./layouts/SharePage";
 import { useRef } from "react";
 import ProtectedRoute from "./components/ProtectedRoute";
+import PipelinesDashboard from "./layouts/PipelinesDashboard";
 
 export default function App() {
   const reactFlowWrapper = useRef(null);
@@ -23,6 +24,10 @@ export default function App() {
             <Toaster richColors position="top-center" />
           </div>
         } />
+
+        <Route path="/dashboard" element={
+          <PipelinesDashboard/>
+        }/>
 
         <Route path="/pipeline/:id" element={
           <ProtectedRoute>
