@@ -1,32 +1,78 @@
 import { useStore } from "../store";
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { supabase } from "../supabaseClient";
 
 function PipelineNameInput() {
+  const currentPipelineName = useStore((state) => state.currentPipelineName);
+  const setCurrentPipelineName = useStore((state) => state.setCurrentPipelineName);
+  const isAutoSaved = useStore((state) => state.isAutoSaved);
+  const canEdit = useStore((state) => state.canEdit);
 
-    const currentPipelineName = useStore((state) => state.currentPipelineName);
-    const setCurrentPipelineName = useStore((state) => state.setCurrentPipelineName);
-    const isAutoSaved = useStore((state) => state.isAutoSaved);
-    const canEdit = useStore((state) => state.canEdit);
+  const { id: pipelineId, token: shareToken } = useParams();
 
-    return (
-        <div className="items-center flex flex-col sm:flex-row sm:mb-0 mb-2">
-            {canEdit && (
-                <>
-                    <p className={`text-xs flex font-normal sm:mr-3 mb-3 sm:mb-0 ${isAutoSaved ? "text-blue-600" : "text-gray-400"}`}>
-                        {isAutoSaved ? "Saved" : "Idle"}
-                    </p>
+  useEffect(() => {
+    const fetchPipelineName = async () => {
+      if (!pipelineId && !shareToken) return;
 
-                    <input
-                    autoFocus
-                        type="text"
-                        value={currentPipelineName}
-                        onChange={(e) => setCurrentPipelineName(e.target.value)}
-                        placeholder="Pipeline name"
-                        className="font-semibold px-2 py-2 sm:py-1 border-b border-gray-400 focus:outline-none bg-transparent sm:text-sm sm:min-w-20 max-w-full"
-                    />
-                </>
-            )}
-        </div>
-    )
+      let data, error;
+
+      if (pipelineId) {
+        const result = await supabase
+          .from("pipelines")
+          .select("name")
+          .eq("id", pipelineId)
+          .single();
+
+        data = result.data;
+        error = result.error;
+      } else if (shareToken) {
+        const result = await supabase
+          .from("pipeline_shared")
+          .select("pipelines(name)")
+          .eq("share_token", shareToken)
+          .single();
+
+        data = result.data?.pipelines; 
+        error = result.error;
+      }
+
+      if (error) {
+        console.error("Failed to fetch pipeline name:", error);
+        return;
+      }
+      if (data?.name) {
+        setCurrentPipelineName(data.name);
+      }
+    };
+
+    fetchPipelineName();
+  }, [pipelineId, shareToken, setCurrentPipelineName]);
+
+  return (
+    <div className="items-center flex flex-col sm:flex-row sm:mb-0 mb-2">
+      {canEdit && (
+        <>
+          <p
+            className={`text-xs flex font-normal sm:mr-3 mb-3 sm:mb-0 ${
+              isAutoSaved ? "text-blue-600" : "text-gray-400"
+            }`}
+          >
+            {isAutoSaved ? "Saved" : "Idle"}
+          </p>
+
+          <input
+            autoFocus
+            type="text"
+            value={currentPipelineName}
+            onChange={(e) => setCurrentPipelineName(e.target.value)}
+            placeholder="Pipeline name"
+            className="font-semibold px-2 py-2 sm:py-1 border-b border-gray-400 focus:outline-none bg-transparent sm:text-sm sm:min-w-20 max-w-full"
+          />
+        </>
+      )}
+    </div>
+  );
 }
 
-export default PipelineNameInput
+export default PipelineNameInput;

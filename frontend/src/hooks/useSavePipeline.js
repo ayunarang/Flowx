@@ -46,7 +46,10 @@ export const useSavePipeline = () => {
       } else {
         const { error } = await supabase
           .from("pipelines")
-          .update({ data: { nodes, edges } })
+          .update({
+            name: pipelineName || "Untitled Pipeline",
+            data: { nodes, edges },
+          })
           .eq("id", pipelineId);
 
         if (error) throw error;

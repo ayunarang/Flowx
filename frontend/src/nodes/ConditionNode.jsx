@@ -19,22 +19,24 @@ export const ConditionNode = ({ id, data }) => {
     <CustomNode
       title="Condition"
       content={content}
-            data={data}
+      data={data}
 
       handles={[
+
+        { type: "target", position: Position.Left, id: `${id}-statement` },
         {
-          type: "target",
-          position: Position.Left,
-          id: `${id}-statement1`,
+          type: "source",
+          position: Position.Right,
+          id: `${id}-true`,
           style: { top: `${100 / 3}%` },
         },
         {
-          type: "target",
-          position: Position.Left,
-          id: `${id}-statement2`,
+          type: "source",
+          position: Position.Right,
+          id: `${id}-false`,
           style: { top: `${200 / 3}%` },
         },
-        { type: "source", position: Position.Right, id: `${id}-result` },
+
       ]}
     />
   );

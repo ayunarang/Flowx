@@ -9,13 +9,12 @@ import MoreOptionsDrawer from "./MoreOptionsDrawer";
 import DownloadDrawer from "./DownloadDrawer";
 import { MoreVerticalIcon } from "lucide-react";
 import PipelineNameInput from "./PipelineNameInput";
-import { useNavigate } from "react-router-dom";
+import DashboardButton from "./DashboardButton";
 
 export const HeaderBar = ({ reactFlowWrapper }) => {
   const { user } = useAuth();
   const [isMoreOpen, setIsMoreOpen] = useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
-  const navigate = useNavigate(); // ✅ Add this line
 
   const getInitial = () => {
     if (user?.email) return user.email.charAt(0).toUpperCase();
@@ -34,15 +33,9 @@ export const HeaderBar = ({ reactFlowWrapper }) => {
         <ShareButton />
         <DownloadButton flowRef={reactFlowWrapper} />
 
-        {/* ✅ Navigate to dashboard and clear path */}
-        <button
-          onClick={() => {
-            navigate("/dashboard", { replace: true });
-          }}
-          className="text-sm bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded"
-        >
-          Dashboard
-        </button>
+        <div className="hidden md:block">
+          <DashboardButton />
+        </div>
 
         <div className="hidden md:block">
           <AuthButton />

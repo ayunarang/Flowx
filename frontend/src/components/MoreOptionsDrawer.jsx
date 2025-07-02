@@ -1,10 +1,10 @@
 import * as Dialog from '@radix-ui/react-dialog';
-import { LayoutDashboard } from 'lucide-react';
 import DownloadButton from './DownloadButton';
 import ShareButton from './ShareButton';
 import AuthButton from './AuthButton';
 import { SavePipelineButton } from './SavePipelineButton';
 import PipelineNameInput from './PipelineNameInput';
+import DashboardButton from './DashboardButton';
 
 export default function MoreOptionsDrawer({
   open,
@@ -30,9 +30,7 @@ export default function MoreOptionsDrawer({
 
             {isSignedIn ? (
               <>
-                <button className={styles}>
-                  <LayoutDashboard className="w-5 h-5" /> Dashboard
-                </button>
+                <DashboardButton isDrawer styles={styles} />
 
                 <SavePipelineButton isDrawer styles={styles} />
 

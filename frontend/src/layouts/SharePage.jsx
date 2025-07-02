@@ -2,19 +2,17 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 import useAuth from "../hooks/useAuth";
-import AuthModal from "./AuthModal";
 import { PipelineUI } from "./PipelineUI";
 import { PipelineToolbar } from "../components/Toolbar";
 import { HeaderBar } from "../components/HeaderBar";
 import { useStore } from "../store";
 
-export default function SharePage() {
+export default function SharePage({reactFlowWrapper}) {
   const { token } = useParams();
   const { user } = useAuth();
   const setNodesAndEdges = useStore((state) => state.setNodesAndEdges);
 
   const [shareRow, setShareRow] = useState(null);
-  const [showAuthModal, setShowAuthModal] = useState(false);
   const setCanEdit = useStore((state) => state.setCanEdit);
 
 
@@ -63,13 +61,6 @@ export default function SharePage() {
     loadShare();
   }, [token, user, setNodesAndEdges]);
 
-  const handleEditClick = () => {
-    if (!user) {
-      setShowAuthModal(true);
-      return;
-    }
-  };
-
   if (!shareRow) {
     return <div>Loading shared pipeline...</div>;
   }
@@ -78,16 +69,14 @@ export default function SharePage() {
 
   return (
     <div className="relative h-screen w-screen">
-      <HeaderBar />
-      <PipelineUI/>
+      <HeaderBar  reactFlowWrapper={reactFlowWrapper}  />
+      <PipelineUI  reactFlowWrapper={reactFlowWrapper} />
 
       {canRenderToolbar && (
         <div className="absolute top-0 left-0 z-10">
-          <PipelineToolbar onEditClick={handleEditClick} />
+          <PipelineToolbar />
         </div>
       )}
-
-      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
     </div>
   );
 }

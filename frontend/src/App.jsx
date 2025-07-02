@@ -43,7 +43,7 @@ export default function App() {
         } />
 
         <Route path="/share/:token" element={
-          <SharePage />
+          <SharePage  reactFlowWrapper={reactFlowWrapper} />
         } />
         
       </Routes>
