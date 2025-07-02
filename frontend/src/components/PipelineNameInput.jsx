@@ -50,7 +50,7 @@ function PipelineNameInput() {
   }, [pipelineId, shareToken, setCurrentPipelineName]);
 
   return (
-    <div className="items-center flex flex-col sm:flex-row sm:mb-0 mb-2">
+    <div className="items-start sm:items-center flex flex-col sm:flex-row sm:mb-0 mb-2">
       {canEdit && (
         <>
           <p
@@ -67,7 +67,7 @@ function PipelineNameInput() {
             value={currentPipelineName}
             onChange={(e) => setCurrentPipelineName(e.target.value)}
             placeholder="Pipeline name"
-            className="font-semibold px-2 py-2 sm:py-1 border-b border-gray-400 focus:outline-none bg-transparent sm:text-sm sm:min-w-20 max-w-full"
+            className="font-semibold px-2 py-2 sm:py-1 border border-gray-400 focus:outline-none bg-transparent sm:text-sm sm:min-w-20 max-w-full"
           />
         </>
       )}

@@ -26,7 +26,7 @@ export default function AuthButton({ isDrawer, styles }) {
         <button
           onClick={handleSignOut}
           className={`${(isDrawer) ? styles : "flex items-center gap-1 text-canvas-ink rounded text-[10px] sm:text-xs font-medium px-2 py-1 sm:px-2 sm:py-1 w-full"} `}>
-          <LogOut className="h-8 sm:h-5 w-8 sm:w-5"/>
+          <LogOut className="h-6 sm:h-5 w-6 sm:w-5"/>
           <span className={!isDrawer && "hidden md:block w-fit whitespace-nowrap"}>
             Sign Out
           </span>
@@ -35,7 +35,7 @@ export default function AuthButton({ isDrawer, styles }) {
         <button
           onClick={() => setAuthModalOpen(true)}
           className={`${(isDrawer) ? styles : "flex items-center gap-1 active:text-canvaPurple-active text-canvaPurple rounded text-[10px] sm:text-sm font-medium px-2 py-1 sm:px-2 sm:py-1 w-full"} `}>
-          <LogIn className="h-8 sm:h-5 w-8 sm:w-5"/>
+          <LogIn className="hh-6 sm:h-5 w-6 sm:w-5"/>
           <span className={!isDrawer && "hidden md:block w-fit whitespace-nowrap"}>
             Sign In
           </span>

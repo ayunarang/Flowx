@@ -20,7 +20,7 @@ export const DraggableNode = ({ type, label, collapsed = false }) => {
     rounded-md sm:border sm:border-gray-200 gap-2
     bg-white text-black
     ${collapsed
-          ? 'sm:p-0 py-3 px-1.5 min-w-20 sm:min-w-fit max-w-fit sm:w-fit text-center'
+          ? 'sm:p-0 py-2 px-1 min-w-20 sm:min-w-fit max-w-fit sm:w-fit text-center'
           : 'p-1.5 sm:min-w-fit'
         }
     text-xs font-medium sm:shadow-subtle
@@ -39,7 +39,7 @@ export const DraggableNode = ({ type, label, collapsed = false }) => {
     items-center justify-center border border-gray-300 rounded-md p-2
   `}
       >
-        {collapsed && getIconForType(type, 28, 'text-canvas-ink')}
+        {collapsed && getIconForType(type, 20, 'text-canvas-ink')}
       </div>
 
       {/* Collapsed + large screens */}

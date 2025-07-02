@@ -29,7 +29,7 @@ export const SavePipelineButton = ({ isDrawer, styles }) => {
             onClick={() => handleSave(false)}
             className={`${isDrawer ? styles : "flex items-center gap-1 text-canvas-ink rounded text-[10px] sm:text-xs font-medium px-2 py-1 sm:px-2 sm:py-1 w-full"}`}
           >
-            <SaveIcon className="h-8 sm:h-5 w-8 sm:w-5"/>
+            <SaveIcon className="h-6 sm:h-5 w-6 sm:w-5"/>
             <span className={!isDrawer && "hidden md:block"}>Save</span>
           </button>
 
@@ -37,7 +37,7 @@ export const SavePipelineButton = ({ isDrawer, styles }) => {
             onClick={() => handleSave(true)}
             className={`${isDrawer ? styles : "flex items-center gap-1 text-canvas-ink rounded text-[10px] sm:text-xs font-medium px-2 py-1 sm:px-2 sm:py-1 w-full whitespace-nowrap"}`}
           >
-            <SaveIcon className="h-8 sm:h-5 w-8 sm:w-5" />
+            <SaveIcon className="h-6 sm:h-5 w-6 sm:w-5" />
             <span className={!isDrawer && "hidden md:block w-fit"}>Save As New</span>
           </button>
         </div>
@@ -48,7 +48,7 @@ export const SavePipelineButton = ({ isDrawer, styles }) => {
           onClick={() => handleSave(false)}
           className={`${isDrawer ? styles : "flex items-center gap-1 text-canvas-ink rounded text-[10px] sm:text-xs font-medium px-2 py-1 sm:px-2 sm:py-1 w-full"}`}
         >
-          <SaveIcon className="h-8 sm:h-5 w-8 sm:w-5"/>
+          <SaveIcon className="h-6 sm:h-5 w-6 sm:w-5"/>
           <span className={!isDrawer && "hidden md:block"}>Save</span>
         </button>
       )}

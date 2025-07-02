@@ -117,11 +117,21 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
     return 0.5;
   };
 
+  const getFitViewPadding = () => {
+    const width = window.innerWidth;
+    if (width < 768) return 0.2;
+    return 1;
+  };
+
+
   useEffect(() => {
     if (!reactFlowInstance) return;
 
     if (nodes.length > 1 && !hasFitView) {
-      reactFlowInstance.fitView({ padding: 0.8, minZoom: getMinZoom() });
+      reactFlowInstance.fitView({
+        padding: getFitViewPadding(),
+        minZoom: getMinZoom()
+      });
       setHasFitView(true);
     }
 
@@ -130,12 +140,16 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
     }
   }, [reactFlowInstance, nodes.length, hasFitView]);
 
+
   useEffect(() => {
     if (!reactFlowInstance) return;
 
     const handleResize = () => {
       if (hasFitView && nodes.length > 1) {
-        reactFlowInstance.fitView({ padding: 0.8, minZoom: getMinZoom() });
+        reactFlowInstance.fitView({
+          padding: getFitViewPadding(),
+          minZoom: getMinZoom()
+        });
       }
     };
 
@@ -163,11 +177,11 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
         onDrop={onDrop}
         onDragOver={onDragOver}
         onInit={setReactFlowInstance}
-
         nodeTypes={nodeTypes}
         proOptions={proOptions}
         snapGrid={[gridSize, gridSize]}
-        connectionLineType="smoothstep"
+        // connectionLineType="smoothstep"
+        connectionMode="loose"
         minZoom={getMinZoom()}
         maxZoom={4}
         isValidConnection={(connection) => {

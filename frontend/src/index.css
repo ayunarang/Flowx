@@ -2,25 +2,64 @@
 @tailwind components;
 @tailwind utilities;
 
+@media (max-width: 768px) {
+  .react-flow__handle {
+    width: 20px !important;
+    height: 20px !important;
+  }
 
-input , select, textarea {
-  @apply border border-gray-100 rounded px-2 py-1 outline-none focus:ring-1 focus:ring-gray-300 font-normal w-full text-lg;
+  #custom-node .custom-node-content select,
+  #custom-node .custom-node-content input,
+  #custom-node .custom-node-content textarea,
+  #custom-node .custom-node-content span {
+    @apply border border-gray-100 rounded px-2 py-2 outline-none focus:ring-1 focus:ring-gray-300 font-normal w-full text-3xl;
+  }
+
+  #custom-node label {
+    @apply text-2xl mb-2 font-medium;
+  }
 }
 
-label{
-    @apply uppercase text-xs mb-1 font-medium;
+#custom-node input,
+#custom-node select,
+#custom-node textarea {
+  @apply border border-gray-100 rounded p-2 outline-none focus:ring-1 focus:ring-gray-300 font-normal w-full text-lg;
 }
 
+label {
+  @apply uppercase text-xs mb-1 font-medium;
+}
 
 .handle-styles {
-  @apply w-3 h-3 bg-green-500 border-2 border-white rounded-full;
-  width: 0.65rem !important;
-  height: 0.65rem !important;
-  background-color: #302d34 !important;
+  @apply border-2 rounded-full;
+  background-color: #1c1c1c !important;
   border-radius: 100% !important;
 }
 
-.toolbar-node {
-    @apply cursor-grab min-w-10 flex items-center justify-center flex-col rounded-md bg-white text-black border-black border px-3 py-2 text-xl font-medium
+.react-flow__handle {
+  position: relative;
+  width: 16px !important;
+  height: 16px !important;
 }
 
+.react-flow__handle::before {
+  content: "";
+  position: absolute;
+  top: -16px;
+  left: -16px;
+  right: -16px;
+  bottom: -16px;
+}
+
+.react-flow__handle:hover,
+.react-flow__handle:focus {
+  @apply ring-2 ring-offset-2 ring-black;
+}
+
+.react-flow {
+  touch-action: none !important;
+}
+
+.toolbar-node {
+  @apply cursor-grab min-w-10 flex items-center justify-center flex-col rounded-md bg-white text-black border-black border px-3 py-2 text-xl font-medium;
+}

@@ -13,39 +13,46 @@ export const CustomNode = ({ data, title, content, handles }) => {
   };
 
   return (
-<div
+<div id="custom-node"
   className="
     bg-white
-    w-[clamp(250px,30vw,300px)]
+    w-[clamp(400px,60vw,500px)]
+    aspect-[4/3]
     rounded-xl border shadow-deep 
-    p-[clamp(0.5rem,2vw,1rem)]
     text-[clamp(0.75rem,1vw,1rem)]
+    flex flex-col  
+    md:w-[clamp(280px,50vw,300px)]
+    md:p-4 
+    md:text-[clamp(0.75rem,1vw,1rem)]
+    p-6
   "
 >
-      <div className="mb-2">
-        <span className="text-xl font-medium">{title}</span>
-      </div>
-      <div className="bg-[#f0f0f0] p-3 rounded-lg text-lg">
-        <div className="flex flex-col gap-3">
-          <div className="flex flex-col">
-            <label htmlFor={`node-${data.id}`} className="text-sm mb-1">
-              Name
-            </label>
-            <input
-              id={`node-${data.id}`}
-              type="text"
-              value={currName}
-              onChange={handleNameChange}
-              className="px-2 py-1 rounded border"
-            />
-          </div>
-          {content}
-        </div>
-      </div>
+  <div className="mb-2">
+    <span className="text-3xl md:text-xl font-medium">{title}</span>
+  </div>
 
-      {(handles || []).map((handle, idx) => (
-        <Handle key={idx} {...handle} className="handle-styles" />
-      ))}
+  <div className="bg-[#f0f0f0] p-6 md:p-3 rounded-lg text-lg flex-1 flex flex-col">
+    <div className="flex flex-col gap-3 flex-1">
+      <div className="flex flex-col">
+        <label htmlFor={`node-${data.id}`} className="mb-1">
+          Name
+        </label>
+        <input
+          id={`node-${data.id}`}
+          type="text"
+          value={currName}
+          onChange={handleNameChange}
+          className="px-2 py-1 rounded border text-3xl ms:text-sm"
+        />
+      </div>
+      <div className="custom-node-content">{content}</div>
     </div>
+  </div>
+
+  {(handles || []).map((handle, idx) => (
+    <Handle key={idx} {...handle} className="handle-styles" />
+  ))}
+</div>
+
   );
 };

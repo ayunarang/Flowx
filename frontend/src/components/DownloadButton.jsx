@@ -13,6 +13,8 @@ export default function DownloadButton({ flowRef, isDrawer, styles }) {
   const nodes = useStore((state) => state.nodes);
 
   const dropdownRef = useRef();
+  const isSmallScreen = window.innerWidth < 768;
+
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -30,8 +32,12 @@ export default function DownloadButton({ flowRef, isDrawer, styles }) {
       el.style.display = "none";
     });
 
+    const isSmallScreen = window.innerWidth < 768;
+
+    const pixelRatio = isSmallScreen ? 3 : 2;
+
     const dataUrl = await toPng(flowRef.current, {
-      pixelRatio: 2,
+      pixelRatio,
       backgroundColor: "#ffffff"
     });
 
@@ -65,8 +71,6 @@ export default function DownloadButton({ flowRef, isDrawer, styles }) {
     setIsDrawerOpen(false);
   };
 
-  const isSmallScreen = window.innerWidth < 768;
-
   const handleClick = () => {
     if (nodes.length === 0) return toast.error("Pipeline is empty.")
 
@@ -83,7 +87,7 @@ export default function DownloadButton({ flowRef, isDrawer, styles }) {
         <button
           onClick={handleClick}
           className={`${(isDrawer) ? styles : "flex items-center gap-1 text-canvas-ink rounded text-[10px] sm:text-xs font-medium px-2 py-1 sm:px-2 sm:py-1"} `}>
-          <DownloadIcon className="h-8 sm:h-5 w-8 sm:w-5"/>
+          <DownloadIcon className="h-6 sm:h-5 w-6 sm:w-5" />
           <span className={!isDrawer && "hidden md:block"}>Download</span>
         </button>
 
