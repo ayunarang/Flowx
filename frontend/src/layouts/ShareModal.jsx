@@ -1,16 +1,27 @@
 import { useState } from 'react';
 import { supabase } from '../supabaseClient';
 import { useStore } from '../store';
+import { CheckIcon, CopyIcon } from 'lucide-react'
 
 export default function ShareModal({ isOpen, onClose }) {
   const pipelineId = useStore((state) => state.currentPipelineId);
+  const nodes = useStore((state) => state.nodes);
 
   const [email, setEmail] = useState('');
   const [access, setAccess] = useState('view');
   const [link, setLink] = useState('');
   const [isLocked, setIsLocked] = useState(false);
+  const [copied, setCopied] = useState(false);
 
-  if (!isOpen) return null;
+
+
+if (!isOpen || nodes.length === 0) return null;
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(link);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000); 
+  };
 
   const handleShare = async () => {
     if (!pipelineId) {
@@ -64,11 +75,17 @@ export default function ShareModal({ isOpen, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded shadow-md w-full max-w-md">
-        <h2 className="text-xl mb-4">Share Pipeline</h2>
+    <div
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="auth-modal-title">
+      <div className="bg-white rounded-xl sm:rounded-lg sm:p-6 p-4 md:w-80 w-72">
+        <h2 id="auth-modal-title" className="text-lg font-bold mb-4">
+          Share Pipeline
+        </h2>
 
-        <p className="text-sm mb-4 text-gray-600">
+        <p className="text-sm mb-4 text-canvas-ink">
           <strong>Note:</strong> Anyone with the link can <em>always view</em> your pipeline.
           The recipient below will have the specified access level.
         </p>
@@ -78,48 +95,69 @@ export default function ShareModal({ isOpen, onClose }) {
           placeholder="Recipient's email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="border px-3 py-2 mb-2 w-full"
+          className="w-full border border-gray-400 px-3 py-2 rounded md:text-base text-sm mb-5"
           disabled={isLocked}
         />
 
-        <select
-          value={access}
-          onChange={(e) => setAccess(e.target.value)}
-          className="border px-3 py-2 mb-4 w-full"
-          disabled={isLocked}
-        >
-          <option value="view">View Only</option>
-          <option value="edit">Edit</option>
-        </select>
+        <div className='flex gap-2 w-full mb-5'>
+          {['view', 'edit'].map((option) => {
+            const isActive = access === option;
+            return (
+              <button
+                key={option}
+                onClick={() => !isLocked && setAccess(option)}
+                disabled={isLocked}
+                className={`
+              flex items-center gap-2 px-4 py-2 rounded-xl border w-full
+              transition-colors duration-200 
+              ${isActive
+                    ? 'border-canvaPurple text-canvaPurple bg-white'
+                    : 'border-gray-200 text-gray-500 bg-white'
+                  }
+              ${isLocked ? 'opacity-50 cursor-not-allowed' : ''}
+            `}
+              >
+                <span className="text-sm font-medium text-center w-full">
+                  {option.charAt(0).toUpperCase() + option.slice(1)}
+                </span>
+
+              </button>)
+          })}
+        </div>
 
         <button
           onClick={handleShare}
-          className={`px-4 py-2 rounded w-full ${isLocked ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 text-white'}`}
+          className={`w-full text-white px-3 py-2 rounded font-medium ${isLocked ? 'bg-gray-400 cursor-not-allowed' : 'bg-canvaPurple active:bg-canvaPurple-active text-white'}`}
           disabled={isLocked}
         >
           {isLocked ? "Link Generated" : "Generate Link"}
         </button>
 
         {link && (
-          <div className="mt-4">
+          <div className="mt-2">
             <input
               type="text"
               readOnly
               value={link}
-              className="border px-3 py-2 mb-2 w-full"
+              className="border px-3 py-2 mb-2 w-full text-sm sm:text-base"
             />
             <button
-              onClick={() => navigator.clipboard.writeText(link)}
-              className="px-4 py-2 bg-gray-700 text-white rounded w-full"
+              onClick={handleCopy}
+              className="px-4 py-3 bg-canvaPurple flex items-center justify-center align-middle gap-3 text-white rounded w-full"
             >
-              Copy Link
+              <span>{copied ? 'Copied!' : 'Copy Link'}</span>
+              {copied ? (
+                <CheckIcon height={16} width={16} />
+              ) : (
+                <CopyIcon height={16} width={16} />
+              )}
             </button>
           </div>
         )}
 
         <button
           onClick={closeModal}
-          className="mt-4 px-4 py-2 bg-gray-300 rounded w-full"
+          className="mt-1.5 px-4 py-2 active:bg-gray-300 rounded w-full"
         >
           Close
         </button>

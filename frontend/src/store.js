@@ -12,6 +12,7 @@ export const useStore = create((set, get) => ({
   currentPipelineId: null,
   currentPipelineName: "Untitled Pipeline",
   isAuthModalOpen: false,
+  isShareModalOpen: false,
   isAutoSaved: false,
   canEdit: true,
   setCanEdit: (flag) => set({ canEdit: flag }),
@@ -101,6 +102,7 @@ export const useStore = create((set, get) => ({
   setPipelineId: (id) => set({ currentPipelineId: id }),
   setNodesAndEdges: (nodes, edges) => set({ nodes, edges }),
   setAuthModalOpen: (isOpen) => set({ isAuthModalOpen: isOpen }),
+  setShareModalOpen: (isOpen) => set({ isShareModalOpen: isOpen }),
   setCurrentPipelineName: (name) => set({ currentPipelineName: name }),
   setAutoSaved: (isSaved) => set({ isAutoSaved: isSaved }),
 }));

@@ -2,18 +2,24 @@ import { useEffect, useRef } from "react";
 import { useStore } from "../store";
 import { useSavePipeline } from "./useSavePipeline";
 
-export function useAutoSavePipeline({ nodes, edges, user, pipelineId, delay , shareToken}) {
+export function useAutoSavePipeline({
+  nodes,
+  edges,
+  user,
+  pipelineId,
+  delay,
+  shareToken,
+}) {
   const { savePipeline } = useSavePipeline();
   const timeoutRef = useRef(null);
   const setAutoSaved = useStore((state) => state.setAutoSaved);
 
   useEffect(() => {
-if (!user) return; 
-if (shareToken) {
-  console.log("[AutoSave] Skipping autosave: shared mode active.");
-  return;
-}
-
+    if (!user) return;
+    if (shareToken) {
+      console.log("[AutoSave] Skipping autosave: shared mode active.");
+      return;
+    }
 
     const shouldAutoSave = nodes.length > 0 || edges.length > 0;
     if (!shouldAutoSave) return;
@@ -31,5 +37,12 @@ if (shareToken) {
     }, delay);
 
     return () => clearTimeout(timeoutRef.current);
-  }, [JSON.stringify(nodes), JSON.stringify(edges), user, pipelineId, delay, shareToken]);
+  }, [
+    JSON.stringify(nodes),
+    JSON.stringify(edges),
+    user,
+    pipelineId,
+    delay,
+    shareToken,
+  ]);
 }

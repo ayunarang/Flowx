@@ -42,7 +42,7 @@ export default function AuthModal({ isOpen, onClose }) {
       aria-modal="true"
       aria-labelledby="auth-modal-title"
     >
-      <div className="bg-white rounded-xl sm:rounded-lg md:p-6 p-3 md:w-80 w-60">
+      <div className="bg-white rounded-xl sm:rounded-lg sm:p-6 p-4  md:w-80 w-60">
         <h2 id="auth-modal-title" className="text-lg font-bold mb-4">
           Sign In
         </h2>
@@ -64,7 +64,7 @@ export default function AuthModal({ isOpen, onClose }) {
           </button>
         </form>
         {message && (
-          <p className="mt-3 text-sm text-green-700">{message}</p>
+          <p className="mt-3 text-xs px-2 py-1 bg-canvas-sky text-canvas-ink">{message}</p>
         )}
         <button
           onClick={onClose}

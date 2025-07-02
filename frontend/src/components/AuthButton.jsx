@@ -1,12 +1,11 @@
 import { supabase } from '../supabaseClient';
 import useAuth from '../hooks/useAuth';
-import AuthModal from '../layouts/AuthModal';
 import { useStore } from '../store';
+import { LogIn, LogOut } from 'lucide-react';
 
-export default function AuthButton() {
+export default function AuthButton({ isDrawer, styles }) {
   const { user } = useAuth();
   const setAuthModalOpen = useStore((state) => state.setAuthModalOpen);
-  const isAuthModalOpen = useStore((state) => state.isAuthModalOpen);
   const setPipelineId = useStore((state) => state.setPipelineId);
   const setNodes = useStore((state) => state.setNodes);
   const setEdges = useStore((state) => state.setEdges);
@@ -26,27 +25,22 @@ export default function AuthButton() {
       {user ? (
         <button
           onClick={handleSignOut}
-          className="
-            bg-gray-700 text-white rounded
-          text-[10px] sm:text-sm
-          font-medium
-          px-2 py-1 sm:px-2 sm:py-1  w-full   max-w-fit       "
-        >
-          Sign Out
+          className={`${(isDrawer) ? styles : "flex items-center gap-1 text-canvas-ink rounded text-[10px] sm:text-xs font-medium px-2 py-1 sm:px-2 sm:py-1 w-full"} `}>
+          <LogOut className="h-8 sm:h-5 w-8 sm:w-5"/>
+          <span className={!isDrawer && "hidden md:block w-fit whitespace-nowrap"}>
+            Sign Out
+          </span>
         </button>
       ) : (
         <button
           onClick={() => setAuthModalOpen(true)}
-          className="
-            bg-blue-600 text-white rounded
-            sm:text-sm text-[10px]
-          font-medium
-          px-2 py-1 sm:px-2 sm:py-1  w-full max-w-fit        "
-        >
-          Sign In
+          className={`${(isDrawer) ? styles : "flex items-center gap-1 active:text-canvaPurple-active text-canvaPurple rounded text-[10px] sm:text-sm font-medium px-2 py-1 sm:px-2 sm:py-1 w-full"} `}>
+          <LogIn className="h-8 sm:h-5 w-8 sm:w-5"/>
+          <span className={!isDrawer && "hidden md:block w-fit whitespace-nowrap"}>
+            Sign In
+          </span>
         </button>
       )}
-      <AuthModal isOpen={isAuthModalOpen} onClose={() => setAuthModalOpen(false)} />
     </>
   );
 }

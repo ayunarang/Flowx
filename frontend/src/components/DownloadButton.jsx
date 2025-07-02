@@ -3,12 +3,26 @@ import { toPng } from "html-to-image";
 import jsPDF from "jspdf";
 import { DownloadIcon } from "lucide-react";
 import DownloadDrawer from "./DownloadDrawer";
+import { useStore } from "../store";
+import { toast } from "sonner";
 
-export default function DownloadButton({ flowRef }) {
+export default function DownloadButton({ flowRef, isDrawer, styles }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [format, setFormat] = useState("png");
+  const nodes = useStore((state) => state.nodes);
+
   const dropdownRef = useRef();
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const download = async () => {
     if (!flowRef.current) return;
@@ -16,10 +30,10 @@ export default function DownloadButton({ flowRef }) {
       el.style.display = "none";
     });
 
-const dataUrl = await toPng(flowRef.current, {
-  pixelRatio: 2,
-  backgroundColor: "#ffffff" // ✅ Makes the background visible!
-});
+    const dataUrl = await toPng(flowRef.current, {
+      pixelRatio: 2,
+      backgroundColor: "#ffffff"
+    });
 
     if (format === "png") {
       const link = document.createElement("a");
@@ -51,19 +65,11 @@ const dataUrl = await toPng(flowRef.current, {
     setIsDrawerOpen(false);
   };
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   const isSmallScreen = window.innerWidth < 768;
 
   const handleClick = () => {
+    if (nodes.length === 0) return toast.error("Pipeline is empty.")
+
     if (isSmallScreen) {
       setIsDrawerOpen(true);
     } else {
@@ -73,28 +79,18 @@ const dataUrl = await toPng(flowRef.current, {
 
   return (
     <>
-      <div className="relative" ref={dropdownRef}>
+      <div className="relative w-full" ref={dropdownRef}>
         <button
           onClick={handleClick}
-          className="
-            flex items-center gap-1
-            bg-blue-600 text-white rounded
-            text-[10px] sm:text-sm
-            font-medium
-            px-2 py-1 sm:px-2 sm:py-1
-          "
-        >
-          <span className="text-lg">
-            <DownloadIcon height={14} width={14} />
-          </span>
-          <span className="hidden md:block">Download</span>
+          className={`${(isDrawer) ? styles : "flex items-center gap-1 text-canvas-ink rounded text-[10px] sm:text-xs font-medium px-2 py-1 sm:px-2 sm:py-1"} `}>
+          <DownloadIcon className="h-8 sm:h-5 w-8 sm:w-5"/>
+          <span className={!isDrawer && "hidden md:block"}>Download</span>
         </button>
 
-        {/* Modal for >= md */}
         {isOpen && !isSmallScreen && (
           <div
             className="
-              absolute left-1/2 -translate-x-1/2 mt-4 w-32
+              absolute left-1/2 -translate-x-1/2 mt-4 w-36
               bg-white border border-gray-200 rounded-md shadow-lg
               flex flex-col z-50
             "
@@ -121,7 +117,6 @@ const dataUrl = await toPng(flowRef.current, {
         )}
       </div>
 
-      {/* Drawer for < md */}
       <DownloadDrawer
         open={isDrawerOpen}
         onOpenChange={setIsDrawerOpen}

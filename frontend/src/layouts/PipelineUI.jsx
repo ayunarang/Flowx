@@ -19,6 +19,8 @@ import usePipelineLoad from "../hooks/usePipelineLoad";
 import { useClearPipelineOnInvalidRoute } from "../hooks/useClearPipelineOnInvalidRoute";
 
 import "reactflow/dist/style.css";
+import AuthModal from "./AuthModal";
+import ShareModal from "./ShareModal";
 
 const gridSize = 20;
 const proOptions = { hideAttribution: true };
@@ -97,7 +99,10 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
   const { user } = useAuth();
   const { id: pipelineId, token: shareToken } = useParams();
   const [hasFitView, setHasFitView] = useState(false);
-
+  const setAuthModalOpen = useStore((state) => state.setAuthModalOpen);
+  const isAuthModalOpen = useStore((state) => state.isAuthModalOpen);
+  const setShareModalOpen = useStore((state) => state.setShareModalOpen);
+  const isShareModalOpen = useStore((state) => state.isShareModalOpen);
 
   useClearPipelineOnInvalidRoute();
   useAutoSavePipeline({ nodes, edges, user, pipelineId, delay: 5000, shareToken });
@@ -169,6 +174,9 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
         <Controls position="top-right" className="no-export" style={{ top: "4rem" }} />
         <MiniMap position="bottom-right" className="no-export hidden md:block" />
       </ReactFlow>
+      <AuthModal isOpen={isAuthModalOpen} onClose={() => setAuthModalOpen(false)} />
+      <ShareModal isOpen={isShareModalOpen} onClose={() => setShareModalOpen(false)} />
+
     </div>
   );
 };

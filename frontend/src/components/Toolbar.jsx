@@ -3,7 +3,7 @@ import { DraggableNode } from "./DraggableNode";
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-export const PipelineToolbar = ({ onEditClick }) => {
+export const PipelineToolbar = () => {
   const canEdit = useStore((state) => state.canEdit);
   const [collapsed, setCollapsed] = useState(false);
 
@@ -69,14 +69,6 @@ export const PipelineToolbar = ({ onEditClick }) => {
               ${collapsed ? "opacity-0 translate-y-[-10px] pointer-events-none" : "opacity-100 translate-y-0"}
             `}
           >
-            {onEditClick && (
-              <button
-                onClick={onEditClick}
-                className="bg-blue-600 text-white px-3 py-2 rounded w-full"
-              >
-                Enable Editing
-              </button>
-            )}
           </div>
         </div>
       </aside>
@@ -84,7 +76,7 @@ export const PipelineToolbar = ({ onEditClick }) => {
       <div
         className={`
           sm:hidden fixed bottom-0 left-0 right-0 bg-white border-t shadow-md
-          flex items-center overflow-x-auto p-2 space-x-3
+          flex items-center overflow-x-auto px-2 py-1.5 space-x-1
         `}
       >
         {[
@@ -93,7 +85,7 @@ export const PipelineToolbar = ({ onEditClick }) => {
           ["customOutput", "Output"],
           ["text", "Text"],
           ["ifElse", "Condition"],
-          ["operation", "Math Operation"],
+          ["operation", "Math"],
           ["constant", "Constant"],
           ["api", "API"],
           ["auth", "Auth"],

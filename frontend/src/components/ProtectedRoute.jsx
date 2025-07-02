@@ -7,9 +7,7 @@ export default function ProtectedRoute({ children }) {
 
     if (loading) {
         return <Spinner />;
-
     }
-
     if (!user) {
         return <Navigate to="/" replace />;
     }

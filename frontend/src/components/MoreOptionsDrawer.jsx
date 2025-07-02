@@ -1,73 +1,56 @@
 import * as Dialog from '@radix-ui/react-dialog';
-import {
-  Download,
-  LogIn,
-  Share2,
-  Save,
-  LayoutDashboard,
-  LogOut
-} from 'lucide-react';
-
+import { LayoutDashboard } from 'lucide-react';
+import DownloadButton from './DownloadButton';
+import ShareButton from './ShareButton';
+import AuthButton from './AuthButton';
+import { SavePipelineButton } from './SavePipelineButton';
+import PipelineNameInput from './PipelineNameInput';
 
 export default function MoreOptionsDrawer({
   open,
   onOpenChange,
   isSignedIn,
-  onDownloadClick,
-  onAuthClick,
+  flowRef,
 }) {
-  const handleClick = (action) => {
-    onOpenChange(false);
-    action();
-  };
+
+  const styles = "flex items-center gap-3 active:bg-gray-100 rounded px-2 py-4 text-base font-medium text-canvas-ink w-full";
 
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/40" />
-        <Dialog.Content className="fixed bottom-0 left-0 right-0 bg-white rounded-t-xl p-4 z-50">
-          <div className="flex flex-col gap-4">
-            <button
-              onClick={() => handleClick(onDownloadClick)}
-              className="flex items-center gap-2"
-            >
-              <Download className="w-5 h-5" /> Download
-            </button>
+        <Dialog.Overlay className="fixed inset-0 bg-black/40 " />
+        <Dialog.Content className="fixed bottom-0 left-0 right-0 bg-white rounded-t-xl p-4 z-30">
+          <div className="flex flex-col gap-1">
+
+            {isSignedIn &&
+              <PipelineNameInput />
+            }
+
+            <DownloadButton flowRef={flowRef} isDrawer styles={styles} />
+
             {isSignedIn ? (
               <>
-                <button className="flex items-center gap-2">
+                <button className={styles}>
                   <LayoutDashboard className="w-5 h-5" /> Dashboard
                 </button>
-                <button className="flex items-center gap-2">
-                  <Save className="w-5 h-5" /> Save
-                </button>
-                <button className="flex items-center gap-2">
-                  <Share2 className="w-5 h-5" /> Share
-                </button>
-                <button className="flex items-center gap-2">
-                  <LogOut className="w-5 h-5" /> Sign Out
-                </button>
+
+                <SavePipelineButton isDrawer styles={styles} />
+
+                <ShareButton isDrawer styles={styles} />
+
+                <AuthButton isDrawer styles={styles} />
               </>
             ) : (
               <>
-                <button
-                  onClick={() => handleClick(onAuthClick)}
-                  className="flex items-center gap-2"
-                >
-                  <LogIn className="w-5 h-5" /> Sign In
-                </button>
-                <button className="flex items-center gap-2">
-                  <Save className="w-5 h-5" /> Save
-                </button>
-                <button className="flex items-center gap-2">
-                  <Share2 className="w-5 h-5" /> Share
-                </button>
+                <AuthButton isDrawer styles={styles} />
+                <SavePipelineButton isDrawer styles={styles} />
+                <ShareButton isDrawer styles={styles} />
               </>
             )}
+
           </div>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
   );
 }
-

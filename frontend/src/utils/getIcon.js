@@ -8,8 +8,8 @@ import CalculateIcon from "@mui/icons-material/Calculate";
 import HttpIcon from "@mui/icons-material/Http";
 import ShapeLineIcon from "@mui/icons-material/ShapeLine";
 
-export const getIconForType = (type, size = 24) => {
-  const iconProps = { style: { fontSize: size } };
+export const getIconForType = (type, size = 24, style) => {
+  const iconProps = { style: { fontSize: size , color: style} };
 
   switch (type) {
     case "customInput":

@@ -1,15 +1,18 @@
-import { useState } from 'react';
-import ShareModal from '../layouts/ShareModal';
 import useAuth from '../hooks/useAuth';
 import { useStore } from '../store';
 import { useSavePipeline } from '../hooks/useSavePipeline';
-import {Share2Icon} from 'lucide-react'
+import { Share2Icon } from 'lucide-react'
 
-export default function ShareButton() {
-  const [showModal, setShowModal] = useState(false);
+export default function ShareButton({ isDrawer, styles }) {
   const setAuthModalOpen = useStore((state) => state.setAuthModalOpen);
+  const setShareModalOpen = useStore((state) => state.setShareModalOpen);
+  const canEdit = useStore((state) => state.canEdit);
+
   const { user } = useAuth();
   const { savePipeline } = useSavePipeline();
+
+  if (!canEdit) return null;
+
 
   const handleShare = async () => {
     if (!user) {
@@ -17,29 +20,18 @@ export default function ShareButton() {
       return;
     }
     await savePipeline(user);
-    setShowModal(true);
+    setShareModalOpen(true);
   };
 
   return (
-    <>
-      <button
-        onClick={handleShare}
-        className="
-          bg-green-600 text-white
-          rounded
-          text-[10px]  sm:text-sm
-          font-medium
-          px-2 py-1 sm:px-2 sm:py-1 flex items-center gap-1
-        "
-      >
-         <span className="text-lg">
-            <Share2Icon height={14} width={14} />
-          </span>
-          <span className="hidden md:block">Share</span>
-      </button>
-
-      <ShareModal isOpen={showModal} onClose={() => setShowModal(false)} />
-    </>
+    <button
+      onClick={handleShare}
+      className={`${(isDrawer) ? styles : "flex items-center gap-1  text-canvas-ink rounded text-[10px] sm:text-xs font-medium px-2 py-1 sm:px-2 sm:py-1"} `}>
+      <Share2Icon className="h-8 sm:h-5 w-8 sm:w-5"/>
+      <span className={!isDrawer && "hidden md:block"}>
+        Share
+      </span>
+    </button>
   );
 }
 
