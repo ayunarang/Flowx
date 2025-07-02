@@ -119,8 +119,8 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
 
   const getFitViewPadding = () => {
     const width = window.innerWidth;
-    if (width < 768) return 0.2;
-    return 1;
+    if (width < 768) return 0.8;
+    return 1.2;
   };
 
 

@@ -42,7 +42,7 @@ export const CustomNode = ({ data, title, content, handles }) => {
           type="text"
           value={currName}
           onChange={handleNameChange}
-          className="px-2 py-1 rounded border text-3xl ms:text-sm"
+          className="px-2 py-1 rounded border text-3xl md:text-sm"
         />
       </div>
       <div className="custom-node-content">{content}</div>

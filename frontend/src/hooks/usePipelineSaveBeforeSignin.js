@@ -30,7 +30,7 @@ export function usePipelineSaveBeforeSignin({
       return;
     }
 
-    const saved = localStorage.getItem("pipeline_draft");
+    const saved = sessionStorage.getItem("pipeline_draft");
     if (saved) {
       try {
         const { nodes: savedNodes, edges: savedEdges } = JSON.parse(saved);
@@ -63,7 +63,7 @@ export function usePipelineSaveBeforeSignin({
     clearTimeout(timeoutRef.current);
 
     timeoutRef.current = setTimeout(() => {
-      localStorage.setItem("pipeline_draft", JSON.stringify({ nodes, edges }));
+      sessionStorage.setItem("pipeline_draft", JSON.stringify({ nodes, edges }));
       console.log("[Bootstrap] Local draft autosaved.");
     }, delay);
 
@@ -82,7 +82,7 @@ export function usePipelineSaveBeforeSignin({
       return;
     }
 
-    const saved = localStorage.getItem("pipeline_draft");
+    const saved = sessionStorage.getItem("pipeline_draft");
     if (!saved) return;
 
     try {
@@ -137,7 +137,7 @@ export function usePipelineSaveBeforeSignin({
           );
         }
 
-        localStorage.removeItem("pipeline_draft");
+        sessionStorage.removeItem("pipeline_draft");
       };
 
       syncToSupabase();
