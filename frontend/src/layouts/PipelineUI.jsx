@@ -23,7 +23,7 @@ import AuthModal from "./AuthModal";
 import ShareModal from "./ShareModal";
 import Spinner from "../components/Spinner";
 
-const gridSize = 20;
+const gridSize = 10;
 const proOptions = { hideAttribution: true };
 const nodeTypes = {
   customInput: InputNode,
@@ -71,6 +71,13 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
   const getInitNodeData = (nodeID, type) => ({ id: nodeID, name: nodeID, nodeType: type });
   const getNodeById = (id) => nodes.find((n) => n.id === id);
 
+  const getMinZoom = () => {
+    const width = window.innerWidth;
+    if (width < 480) return 0.28;
+    if (width < 768) return 0.3;
+    return 0.5;
+  };
+
   const onDrop = useCallback(
     (event) => {
       event.preventDefault();
@@ -96,8 +103,16 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
       };
 
       addNode(newNode);
+
+      if (nodes.length === 0) {
+        reactFlowInstance.setViewport({
+          x: 0,
+          y: 0,
+          zoom: getMinZoom(),
+        });
+      }
     },
-    [reactFlowInstance]
+    [reactFlowInstance, nodes.length]
   );
 
   const onDragOver = useCallback((event) => {
@@ -105,32 +120,17 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
     event.dataTransfer.dropEffect = "move";
   }, []);
 
-
   useClearPipelineOnInvalidRoute();
   useAutoSavePipeline({ nodes, edges, user, pipelineId, delay: 5000, shareToken });
   usePipelineSaveBeforeSignin({ user, pipelineId, delay: 3000, shareToken });
-
-  const getMinZoom = () => {
-    const width = window.innerWidth;
-    if (width < 480) return 0.22;
-    if (width < 768) return 0.3;
-    return 0.5;
-  };
-
-  const getFitViewPadding = () => {
-    const width = window.innerWidth;
-    if (width < 768) return 0.8;
-    return 1.2;
-  };
-
 
   useEffect(() => {
     if (!reactFlowInstance) return;
 
     if (nodes.length > 1 && !hasFitView) {
       reactFlowInstance.fitView({
-        padding: getFitViewPadding(),
-        minZoom: getMinZoom()
+        padding: 2,
+        minZoom: getMinZoom(),
       });
       setHasFitView(true);
     }
@@ -140,15 +140,14 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
     }
   }, [reactFlowInstance, nodes.length, hasFitView]);
 
-
   useEffect(() => {
     if (!reactFlowInstance) return;
 
     const handleResize = () => {
       if (hasFitView && nodes.length > 1) {
         reactFlowInstance.fitView({
-          padding: getFitViewPadding(),
-          minZoom: getMinZoom()
+          padding: 2,
+          minZoom: getMinZoom(),
         });
       }
     };
@@ -156,8 +155,6 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [reactFlowInstance, nodes.length, hasFitView]);
-
-
 
   if (authLoading || pipelineLoading) {
     return <Spinner />;
@@ -180,10 +177,10 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
         nodeTypes={nodeTypes}
         proOptions={proOptions}
         snapGrid={[gridSize, gridSize]}
-        // connectionLineType="smoothstep"
         connectionMode="loose"
         minZoom={getMinZoom()}
         maxZoom={4}
+        defaultViewport={{ x: 0, y: 0, zoom: getMinZoom() }}
         isValidConnection={(connection) => {
           const sourceNode = getNodeById(connection.source);
           const targetNode = getNodeById(connection.target);
@@ -198,13 +195,12 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
           return true;
         }}
       >
-        <Background gap={gridSize} variant="dots" color="#060606" />
+        <Background gap={gridSize} variant="dots" color="#4F4F4F" />
         <Controls position="top-right" className="no-export" style={{ top: "4rem" }} />
         <MiniMap position="bottom-right" className="no-export hidden md:block" />
       </ReactFlow>
       <AuthModal isOpen={isAuthModalOpen} onClose={() => setAuthModalOpen(false)} />
       <ShareModal isOpen={isShareModalOpen} onClose={() => setShareModalOpen(false)} />
-
     </div>
   );
 };
