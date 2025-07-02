@@ -2,28 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-@media (max-width: 768px) {
-  .react-flow__handle {
-    width: 24px !important;
-    height: 24px !important;
-  }
-
-  #custom-node .custom-node-content select,
-  #custom-node .custom-node-content input,
-  #custom-node .custom-node-content textarea,
-  #custom-node .custom-node-content span {
-    @apply border border-gray-100 rounded px-2 py-2 outline-none focus:ring-1 focus:ring-gray-300 font-normal w-full text-3xl;
-  }
-
-  #custom-node label {
-    @apply text-2xl mb-2 font-medium;
-  }
-}
-
 #custom-node input,
 #custom-node select,
 #custom-node textarea {
-  @apply border border-gray-100 rounded p-2 outline-none focus:ring-1 focus:ring-gray-300 font-normal w-full text-lg;
+  @apply border border-gray-100 rounded p-2 outline-none focus:ring-1 focus:ring-gray-300 font-normal w-full text-lg bg-white;
 }
 
 label {
@@ -38,8 +20,8 @@ label {
 
 .react-flow__handle {
   position: relative;
-  width: 16px !important;
-  height: 16px !important;
+  width: 12px !important;
+  height: 12px !important;
 }
 
 .react-flow__handle::before {
@@ -62,4 +44,27 @@ label {
 
 .toolbar-node {
   @apply cursor-grab min-w-10 flex items-center justify-center flex-col rounded-md bg-white text-black border-black border px-3 py-2 text-xl font-medium;
+}
+
+
+@media (max-width: 768px) {
+  .react-flow__handle {
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  #custom-node .custom-node-content select,
+  #custom-node .custom-node-content input,
+  #custom-node .custom-node-content textarea,
+  #custom-node .custom-node-content span {
+    @apply border border-gray-100 rounded px-2 py-2 outline-none focus:ring-1 focus:ring-gray-300 font-normal w-full text-3xl;
+  }
+
+  #custom-node .custom-node-heading input{
+    @apply text-3xl;
+  }
+
+  #custom-node label {
+    @apply text-2xl mb-2 font-medium;
+  }
 }

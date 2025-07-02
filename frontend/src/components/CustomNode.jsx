@@ -18,7 +18,7 @@ export const CustomNode = ({ data, title, content, handles }) => {
     bg-white
     w-[clamp(400px,60vw,500px)]
     aspect-[4/3]
-    rounded-xl border shadow-deep 
+    rounded-xl border border-gray-400 shadow-deep 
     text-[clamp(0.75rem,1vw,1rem)]
     flex flex-col  
     md:w-[clamp(280px,50vw,300px)]
@@ -33,7 +33,7 @@ export const CustomNode = ({ data, title, content, handles }) => {
 
   <div className="bg-[#f0f0f0] p-6 md:p-3 rounded-lg text-lg flex-1 flex flex-col">
     <div className="flex flex-col gap-3 flex-1">
-      <div className="flex flex-col">
+      <div className="flex flex-col custom-node-heading">
         <label htmlFor={`node-${data.id}`} className="mb-1">
           Name
         </label>
@@ -42,7 +42,7 @@ export const CustomNode = ({ data, title, content, handles }) => {
           type="text"
           value={currName}
           onChange={handleNameChange}
-          className="px-2 py-1 rounded border text-3xl md:text-sm"
+          className="px-2 py-1 rounded border"
         />
       </div>
       <div className="custom-node-content">{content}</div>

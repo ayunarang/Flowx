@@ -28,17 +28,25 @@ export default function DownloadButton({ flowRef, isDrawer, styles }) {
 
   const download = async () => {
     if (!flowRef.current) return;
+
     flowRef.current.querySelectorAll(".no-export").forEach((el) => {
       el.style.display = "none";
     });
 
     const isSmallScreen = window.innerWidth < 768;
 
-    const pixelRatio = isSmallScreen ? 3 : 2;
+    const devicePixelRatio = window.devicePixelRatio || 1;
+    const pixelRatio = Math.max(devicePixelRatio, isSmallScreen ? 2 : 2);
 
     const dataUrl = await toPng(flowRef.current, {
       pixelRatio,
-      backgroundColor: "#ffffff"
+      backgroundColor: "#ffffff",
+      filter: (node) => {
+        if (node instanceof HTMLElement) {
+          node.style.boxShadow = "none";
+        }
+        return true;
+      },
     });
 
     if (format === "png") {
@@ -70,6 +78,7 @@ export default function DownloadButton({ flowRef, isDrawer, styles }) {
     setIsOpen(false);
     setIsDrawerOpen(false);
   };
+
 
   const handleClick = () => {
     if (nodes.length === 0) return toast.error("Pipeline is empty.")

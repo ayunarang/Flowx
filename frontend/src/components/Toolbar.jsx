@@ -15,7 +15,7 @@ export const PipelineToolbar = () => {
     <>
       <aside
         className={`
-          hidden sm:flex flex-col justify-between
+          hidden md:flex flex-col justify-between
           ${collapsed ? "w-14" : "w-40"}
           h-full bg-white border-r shadow-md rounded-lg mt-20 ml-4 md:m-4 px-2 py-1
           transition-all duration-500 ease-in-out
@@ -75,7 +75,7 @@ export const PipelineToolbar = () => {
 
       <div
         className={`
-          sm:hidden fixed bottom-0 left-0 right-0 bg-white border-t shadow-md
+          md:hidden fixed bottom-0 left-0 right-0 bg-white border-t shadow-md
           flex items-center overflow-x-auto px-2 py-1.5`}
       >
         {[

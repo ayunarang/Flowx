@@ -22,14 +22,14 @@ export default function DownloadDrawer({
 
           <button
             onClick={onDownload}
-            className="w-full bg-canvaPurple hover:bg-canvaPurple-hover active:bg-canvaPurple-active text-white font-medium py-3 px-2 rounded-md text-2xl"
+            className="w-full bg-canvaPurple hover:bg-canvaPurple-hover active:bg-canvaPurple-active text-white font-medium py-3 px-2 rounded-md text-base"
           >
             Download
           </button>
 
           <Dialog.Close asChild>
             <button
-              className="mt-4 w-full text-lg text-gray-800 bg-gray-100 active:bg-gray-200 py-3 px-2 rounded-lg"
+              className="mt-4 w-full text-sm text-gray-800 bg-gray-100 active:bg-gray-200 py-3 px-2 rounded-lg"
             >
               Cancel
             </button>
