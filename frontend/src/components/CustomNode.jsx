@@ -13,15 +13,15 @@ export const CustomNode = ({ data, title, content, handles }) => {
   };
 
   return (
-    <div
-      className="
+<div
+  className="
     bg-white
-    w-[clamp(280px,50vw,300px)]
+    w-[clamp(250px,30vw,300px)]
     rounded-xl border shadow-deep 
-    p-4 
+    p-[clamp(0.5rem,2vw,1rem)]
     text-[clamp(0.75rem,1vw,1rem)]
   "
-    >
+>
       <div className="mb-2">
         <span className="text-xl font-medium">{title}</span>
       </div>

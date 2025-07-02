@@ -26,15 +26,15 @@ export default function App() {
         } />
 
         <Route path="/dashboard" element={
-          <PipelinesDashboard/>
-        }/>
+          <PipelinesDashboard />
+        } />
 
         <Route path="/pipeline/:id" element={
           <ProtectedRoute>
             <div className="relative h-screen w-screen">
               <PipelineUI reactFlowWrapper={reactFlowWrapper} />
               <div className="absolute top-0 left-0 z-10">
-                <PipelineToolbar/>
+                <PipelineToolbar />
               </div>
               <HeaderBar reactFlowWrapper={reactFlowWrapper} />
               <Toaster richColors position="top-center" />
@@ -42,10 +42,11 @@ export default function App() {
           </ProtectedRoute>
         } />
 
+
         <Route path="/share/:token" element={
-          <SharePage  reactFlowWrapper={reactFlowWrapper} />
+          <SharePage reactFlowWrapper={reactFlowWrapper} />
         } />
-        
+
       </Routes>
     </Router>
   );

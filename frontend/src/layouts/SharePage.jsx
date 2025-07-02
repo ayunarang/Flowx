@@ -6,15 +6,16 @@ import { PipelineUI } from "./PipelineUI";
 import { PipelineToolbar } from "../components/Toolbar";
 import { HeaderBar } from "../components/HeaderBar";
 import { useStore } from "../store";
+import Spinner from "../components/Spinner";
 
-export default function SharePage({reactFlowWrapper}) {
+export default function SharePage({ reactFlowWrapper }) {
   const { token } = useParams();
   const { user } = useAuth();
   const setNodesAndEdges = useStore((state) => state.setNodesAndEdges);
 
   const [shareRow, setShareRow] = useState(null);
   const setCanEdit = useStore((state) => state.setCanEdit);
-
+  
 
   useEffect(() => {
     if (!token) return;
@@ -52,7 +53,7 @@ export default function SharePage({reactFlowWrapper}) {
       }
 
       if (data.access === "edit") {
-        setCanEdit(!!user); 
+        setCanEdit(!!user);
       } else {
         setCanEdit(false);
       }
@@ -62,15 +63,15 @@ export default function SharePage({reactFlowWrapper}) {
   }, [token, user, setNodesAndEdges]);
 
   if (!shareRow) {
-    return <div>Loading shared pipeline...</div>;
+    return <Spinner />;
   }
 
   const canRenderToolbar = shareRow.access === "edit";
 
   return (
     <div className="relative h-screen w-screen">
-      <HeaderBar  reactFlowWrapper={reactFlowWrapper}  />
-      <PipelineUI  reactFlowWrapper={reactFlowWrapper} />
+      <HeaderBar reactFlowWrapper={reactFlowWrapper} />
+      <PipelineUI reactFlowWrapper={reactFlowWrapper} />
 
       {canRenderToolbar && (
         <div className="absolute top-0 left-0 z-10">

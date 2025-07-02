@@ -21,6 +21,7 @@ import { useClearPipelineOnInvalidRoute } from "../hooks/useClearPipelineOnInval
 import "reactflow/dist/style.css";
 import AuthModal from "./AuthModal";
 import ShareModal from "./ShareModal";
+import Spinner from "../components/Spinner";
 
 const gridSize = 20;
 const proOptions = { hideAttribution: true };
@@ -48,6 +49,14 @@ const selector = (state) => ({
 
 export const PipelineUI = ({ reactFlowWrapper }) => {
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
+  const { id: pipelineId, token: shareToken } = useParams();
+  const { user, loading: authLoading } = useAuth();
+  const { isLoading: pipelineLoading } = usePipelineLoad({ pipelineId, shareToken });
+  const [hasFitView, setHasFitView] = useState(false);
+  const setAuthModalOpen = useStore((state) => state.setAuthModalOpen);
+  const isAuthModalOpen = useStore((state) => state.isAuthModalOpen);
+  const setShareModalOpen = useStore((state) => state.setShareModalOpen);
+  const isShareModalOpen = useStore((state) => state.isShareModalOpen);
 
   const {
     nodes,
@@ -96,17 +105,9 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
     event.dataTransfer.dropEffect = "move";
   }, []);
 
-  const { user } = useAuth();
-  const { id: pipelineId, token: shareToken } = useParams();
-  const [hasFitView, setHasFitView] = useState(false);
-  const setAuthModalOpen = useStore((state) => state.setAuthModalOpen);
-  const isAuthModalOpen = useStore((state) => state.isAuthModalOpen);
-  const setShareModalOpen = useStore((state) => state.setShareModalOpen);
-  const isShareModalOpen = useStore((state) => state.isShareModalOpen);
 
   useClearPipelineOnInvalidRoute();
   useAutoSavePipeline({ nodes, edges, user, pipelineId, delay: 5000, shareToken });
-  usePipelineLoad({ pipelineId, shareToken });
   usePipelineSaveBeforeSignin({ user, pipelineId, delay: 3000, shareToken });
 
   const getMinZoom = () => {
@@ -117,23 +118,36 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
   };
 
   useEffect(() => {
-    const handleResize = () => {
-      if (reactFlowInstance && nodes.length > 0) {
-        reactFlowInstance.fitView({ padding: 0.8, minZoom: getMinZoom() });
-      }
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [reactFlowInstance, nodes]);
+    if (!reactFlowInstance) return;
 
-
-  useEffect(() => {
-    if (reactFlowInstance && nodes.length > 0 && !hasFitView) {
+    if (nodes.length > 1 && !hasFitView) {
       reactFlowInstance.fitView({ padding: 0.8, minZoom: getMinZoom() });
       setHasFitView(true);
     }
-  }, [reactFlowInstance, nodes, hasFitView]);
 
+    if (nodes.length <= 1 && hasFitView) {
+      setHasFitView(false);
+    }
+  }, [reactFlowInstance, nodes.length, hasFitView]);
+
+  useEffect(() => {
+    if (!reactFlowInstance) return;
+
+    const handleResize = () => {
+      if (hasFitView && nodes.length > 1) {
+        reactFlowInstance.fitView({ padding: 0.8, minZoom: getMinZoom() });
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [reactFlowInstance, nodes.length, hasFitView]);
+
+
+
+  if (authLoading || pipelineLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div
