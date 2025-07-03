@@ -30,19 +30,19 @@ export default function MoreOptionsDrawer({
 
             {isSignedIn ? (
               <>
-                <DashboardButton isDrawer styles={styles} />
+                <DashboardButton isDrawer styles={styles}/>
 
-                <SavePipelineButton isDrawer styles={styles} />
+                <SavePipelineButton isDrawer styles={styles}  onOpenChange={onOpenChange}/>
 
-                <ShareButton isDrawer styles={styles} />
+                <ShareButton isDrawer styles={styles}  onOpenChange={onOpenChange}/>
 
-                <AuthButton isDrawer styles={styles} />
+                <AuthButton isDrawer styles={styles}  onOpenChange={onOpenChange}/>
               </>
             ) : (
               <>
-                <AuthButton isDrawer styles={styles} />
-                <SavePipelineButton isDrawer styles={styles} />
-                <ShareButton isDrawer styles={styles} />
+                <AuthButton isDrawer styles={styles}  onOpenChange={onOpenChange}/>
+                <SavePipelineButton isDrawer styles={styles}  onOpenChange={onOpenChange}/>
+                <ShareButton isDrawer styles={styles}  onOpenChange={onOpenChange}/>
               </>
             )}
 

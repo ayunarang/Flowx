@@ -53,10 +53,6 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
   const { user, loading: authLoading } = useAuth();
   const { isLoading: pipelineLoading } = usePipelineLoad({ pipelineId, shareToken });
   const [hasFitView, setHasFitView] = useState(false);
-  const setAuthModalOpen = useStore((state) => state.setAuthModalOpen);
-  const isAuthModalOpen = useStore((state) => state.isAuthModalOpen);
-  const setShareModalOpen = useStore((state) => state.setShareModalOpen);
-  const isShareModalOpen = useStore((state) => state.isShareModalOpen);
 
   const {
     nodes,
@@ -199,8 +195,8 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
         <Controls position="top-right" className="no-export" style={{ top: "4rem" }} />
         <MiniMap position="bottom-right" className="no-export hidden md:block" />
       </ReactFlow>
-      <AuthModal isOpen={isAuthModalOpen} onClose={() => setAuthModalOpen(false)} />
-      <ShareModal isOpen={isShareModalOpen} onClose={() => setShareModalOpen(false)} />
+      <AuthModal/>
+      <ShareModal/>
     </div>
   );
 };

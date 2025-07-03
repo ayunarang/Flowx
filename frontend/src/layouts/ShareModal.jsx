@@ -3,24 +3,25 @@ import { supabase } from '../supabaseClient';
 import { useStore } from '../store';
 import { CheckIcon, CopyIcon } from 'lucide-react'
 
-export default function ShareModal({ isOpen, onClose }) {
+export default function ShareModal() {
   const pipelineId = useStore((state) => state.currentPipelineId);
   const nodes = useStore((state) => state.nodes);
-
   const [email, setEmail] = useState('');
   const [access, setAccess] = useState('view');
   const [link, setLink] = useState('');
   const [isLocked, setIsLocked] = useState(false);
   const [copied, setCopied] = useState(false);
+  const setShareModalOpen = useStore((state) => state.setShareModalOpen);
+  const isShareModalOpen = useStore((state) => state.isShareModalOpen);
 
 
 
-if (!isOpen || nodes.length === 0) return null;
+  if (!isShareModalOpen || nodes.length === 0) return null;
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(link);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000); 
+    setTimeout(() => setCopied(false), 2000);
   };
 
   const handleShare = async () => {
@@ -71,7 +72,7 @@ if (!isOpen || nodes.length === 0) return null;
     setAccess('view');
     setLink('');
     setIsLocked(false);
-    onClose();
+    setShareModalOpen(false);
   };
 
   return (

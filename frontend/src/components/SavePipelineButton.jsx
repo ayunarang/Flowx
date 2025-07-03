@@ -4,7 +4,7 @@ import useAuth from "../hooks/useAuth";
 import { useSavePipeline } from "../hooks/useSavePipeline";
 import { useParams } from "react-router-dom";
 
-export const SavePipelineButton = ({ isDrawer, styles }) => {
+export const SavePipelineButton = ({ isDrawer, styles, onOpenChange }) => {
   const setAuthModalOpen = useStore((state) => state.setAuthModalOpen);
   const { user } = useAuth();
   const { savePipeline } = useSavePipeline();
@@ -16,9 +16,11 @@ export const SavePipelineButton = ({ isDrawer, styles }) => {
   const handleSave = (saveAsNew = false) => {
     if (!user) {
       setAuthModalOpen(true);
+      isDrawer && onOpenChange(false)
       return;
     }
     savePipeline(user, saveAsNew ? { saveAsNew: true } : undefined);
+    isDrawer && onOpenChange(false)
   };
 
   return (
@@ -29,7 +31,7 @@ export const SavePipelineButton = ({ isDrawer, styles }) => {
             onClick={() => handleSave(false)}
             className={`${isDrawer ? styles : "flex items-center gap-1 text-canvas-ink rounded text-[10px] sm:text-xs font-medium px-2 py-1 sm:px-2 sm:py-1 w-full"}`}
           >
-            <SaveIcon className="h-6 sm:h-5 w-6 sm:w-5"/>
+            <SaveIcon className="h-6 sm:h-5 w-6 sm:w-5" />
             <span className={!isDrawer && "hidden md:block"}>Save</span>
           </button>
 
@@ -48,7 +50,7 @@ export const SavePipelineButton = ({ isDrawer, styles }) => {
           onClick={() => handleSave(false)}
           className={`${isDrawer ? styles : "flex items-center gap-1 text-canvas-ink rounded text-[10px] sm:text-xs font-medium px-2 py-1 sm:px-2 sm:py-1 w-full"}`}
         >
-          <SaveIcon className="h-6 sm:h-5 w-6 sm:w-5"/>
+          <SaveIcon className="h-6 sm:h-5 w-6 sm:w-5" />
           <span className={!isDrawer && "hidden md:block"}>Save</span>
         </button>
       )}
