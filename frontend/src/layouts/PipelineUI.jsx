@@ -22,6 +22,7 @@ import "reactflow/dist/style.css";
 import AuthModal from "./AuthModal";
 import ShareModal from "./ShareModal";
 import Spinner from "../components/Spinner";
+import CustomEdge from "../components/CustomEdge";
 
 const gridSize = 10;
 const proOptions = { hideAttribution: true };
@@ -36,6 +37,11 @@ const nodeTypes = {
   api: APINode,
   auth: AuthNode,
 };
+
+const edgeTypes = {
+  custom: CustomEdge
+};
+
 
 const selector = (state) => ({
   nodes: state.nodes,
@@ -171,6 +177,7 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
         onDragOver={onDragOver}
         onInit={setReactFlowInstance}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         proOptions={proOptions}
         snapGrid={[gridSize, gridSize]}
         connectionMode="loose"
@@ -195,8 +202,8 @@ export const PipelineUI = ({ reactFlowWrapper }) => {
         <Controls position="top-right" className="no-export" style={{ top: "4rem" }} />
         <MiniMap position="bottom-right" className="no-export hidden md:block" />
       </ReactFlow>
-      <AuthModal/>
-      <ShareModal/>
+      <AuthModal />
+      <ShareModal />
     </div>
   );
 };

@@ -15,9 +15,11 @@ export const useStore = create((set, get) => ({
   isShareModalOpen: false,
   isAutoSaved: false,
   canEdit: true,
+
   setCanEdit: (flag) => set({ canEdit: flag }),
   setNodes: (nodes) => set({ nodes }),
   setEdges: (edges) => set({ edges }),
+
   getNodeID: (type) => {
     const newIDs = { ...get().nodeIDs };
     if (newIDs[type] === undefined) {
@@ -27,27 +29,35 @@ export const useStore = create((set, get) => ({
     set({ nodeIDs: newIDs });
     return `${type}-${newIDs[type]}`;
   },
+
   addNode: (node) => {
     set({
       nodes: [...get().nodes, node],
     });
   },
+
   onNodesChange: (changes) => {
     set({
       nodes: applyNodeChanges(changes, get().nodes),
     });
   },
+
   onEdgesChange: (changes) => {
     set({
       edges: applyEdgeChanges(changes, get().edges),
     });
   },
+
   onConnect: (connection) => {
     set({
       edges: addEdge(
         {
           ...connection,
-          type: "smoothstep",
+          id: `e-${connection.source}-${connection.target}-${Date.now()}`,
+          type: "custom", 
+          data: {
+            disconnectEdge: get().disconnectEdge,
+          },
           animated: true,
           markerEnd: {
             type: MarkerType.Arrow,
@@ -65,13 +75,14 @@ export const useStore = create((set, get) => ({
       ),
     });
   },
+
   updateNodeField: (nodeId, fieldName, fieldValue) => {
     set({
-      nodes: get().nodes.map((node) => {
-        return node.id === nodeId
+      nodes: get().nodes.map((node) =>
+        node.id === nodeId
           ? { ...node, data: { ...node.data, [fieldName]: fieldValue } }
-          : node;
-      }),
+          : node
+      ),
     });
   },
 
@@ -81,7 +92,10 @@ export const useStore = create((set, get) => ({
         {
           id: `e-${connection.source}-${connection.target}-${Date.now()}`,
           ...connection,
-          type: "smoothstep",
+          type: "custom", 
+          data: {
+            disconnectEdge: get().disconnectEdge,
+          },
           animated: true,
           markerEnd: {
             type: MarkerType.Arrow,
@@ -99,6 +113,13 @@ export const useStore = create((set, get) => ({
       ),
     });
   },
+
+  disconnectEdge: (edgeId) => {
+    set({
+      edges: get().edges.filter((edge) => edge.id !== edgeId),
+    });
+  },
+
   setPipelineId: (id) => set({ currentPipelineId: id }),
   setNodesAndEdges: (nodes, edges) => set({ nodes, edges }),
   setAuthModalOpen: (isOpen) => set({ isAuthModalOpen: isOpen }),
