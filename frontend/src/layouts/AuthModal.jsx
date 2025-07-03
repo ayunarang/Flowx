@@ -3,6 +3,7 @@ import { supabase } from "../supabaseClient";
 import OtpVerification from "../components/OtpVerification";
 import { toast } from "sonner";
 import { useStore } from "../store";
+import useAuth from "../hooks/useAuth";
 
 export default function AuthModal() {
   const [email, setEmail] = useState("");
@@ -12,7 +13,13 @@ export default function AuthModal() {
   const [cooldown, setCooldown] = useState(0);
   const setAuthModalOpen = useStore((state) => state.setAuthModalOpen);
   const isAuthModalOpen = useStore((state) => state.isAuthModalOpen);
+  const { user } = useAuth();
 
+  useEffect(() => {
+    if (user) {
+      setAuthModalOpen(false);
+    }
+  }, []);
 
   useEffect(() => {
     let timer;
@@ -36,7 +43,7 @@ export default function AuthModal() {
 
     setLoading(true);
 
-    const { error } = await supabase.auth.signInWithOtp({email})
+    const { error } = await supabase.auth.signInWithOtp({ email })
 
     if (error) {
       console.error("Supabase sign-in error:", error);

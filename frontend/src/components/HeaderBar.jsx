@@ -22,7 +22,7 @@ export const HeaderBar = ({ reactFlowWrapper }) => {
 
   return (
     <div className="fixed top-4 left-1/2 -translate-x-1/2 md:left-auto md:right-4 md:translate-x-0 z-30 flex justify-between md:w-fit w-auto items-center bg-white sm:px-5 px-3 py-2 rounded-md shadow-md sm:gap-2 align-middle">
-      
+
       <div className="hidden sm:flex">
         <PipelineNameInput />
       </div>
@@ -42,15 +42,28 @@ export const HeaderBar = ({ reactFlowWrapper }) => {
 
         {user && (
           <div className="flex relative items-center gap-2 mx-2">
-            <div className="group relative">
-              <div className="w-8 h-8 rounded-full bg-canvas-sky flex items-center justify-center font-bold text-canvaPurple cursor-default">
+            <div className="relative">
+              <div className="w-8 h-8 rounded-full bg-canvas-sky flex items-center justify-center font-bold text-canvaPurple cursor-pointer peer">
                 {getInitial()}
               </div>
-              <div className="absolute top-14 right-0 px-2 py-1 bg-canvas-sky text-canvas-charcoal text-sm rounded opacity-0 group-hover:opacity-100 transition">
+              <div className="absolute mt-3 right-0 px-3 py-2 bg-canvas-sky text-canvas-charcoal sm:text-sm text-xs rounded opacity-0 sm:font-medium peer-hover:opacity-100 transition">
                 {user.email}
+                <span
+                  className="absolute"
+                  style={{
+                    bottom: "100%",
+                    right: "0.75rem",
+                    width: 0,
+                    height: 0,
+                    borderLeft: "8px solid transparent",
+                    borderRight: "8px solid transparent",
+                    borderBottom: "8px solid #afcbff",
+                  }}
+                ></span>
               </div>
             </div>
           </div>
+
         )}
 
         <button
