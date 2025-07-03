@@ -17,13 +17,13 @@ export const DraggableNode = ({ type, label, collapsed = false }) => {
       className={`
     cursor-grab
     flex ${collapsed ? "flex-col items-center justify-center" : "flex-row items-center"}
-    rounded-md sm:border sm:border-gray-200 gap-2
+    rounded-md md:border md:border-gray-200 gap-2
     bg-white text-black
     ${collapsed
-          ? 'sm:p-0 py-2 px-1 min-w-20 sm:min-w-fit max-w-fit sm:w-fit text-center'
-          : 'p-1.5 sm:min-w-fit'
+          ? 'md:p-0 py-2 px-1 min-w-20 md:min-w-fit max-w-fit md:w-fit text-center'
+          : 'p-1.5 md:min-w-fit'
         }
-    text-xs font-medium sm:shadow-subtle
+    text-xs font-medium md:shadow-subtle
   `}
 
 
@@ -35,7 +35,7 @@ export const DraggableNode = ({ type, label, collapsed = false }) => {
       <div
         className={`
     ${collapsed ? 'flex' : 'hidden'} 
-    sm:hidden 
+    md:hidden 
     items-center justify-center border border-gray-300 rounded-md p-2
   `}
       >
@@ -46,7 +46,7 @@ export const DraggableNode = ({ type, label, collapsed = false }) => {
       <div
         className={`
     hidden 
-    ${collapsed ? 'sm:flex' : ''} 
+    ${collapsed ? 'md:flex' : ''} 
     items-center justify-center border border-gray-300 rounded-md p-2
   `}
       >
@@ -64,7 +64,7 @@ export const DraggableNode = ({ type, label, collapsed = false }) => {
       </div>
 
       {collapsed ? (
-        <span className="text-sm sm:text-xs text-center sm:hidden whitespace-nowrap text-canvas-ink">{label}</span>
+        <span className="text-sm md:text-xs text-center md:hidden whitespace-nowrap text-canvas-ink">{label}</span>
       ) : (
         <span className="leading-none break-words text-canvas-ink">{label}</span>
       )}

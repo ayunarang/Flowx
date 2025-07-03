@@ -23,7 +23,9 @@ export default function MoreOptionsDrawer({
           <div className="flex flex-col gap-1">
 
             {isSignedIn &&
+            <div className='sm:hidden'>
               <PipelineNameInput />
+              </div>
             }
 
             <DownloadButton flowRef={flowRef} isDrawer styles={styles} />

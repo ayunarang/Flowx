@@ -1,4 +1,4 @@
-import { SaveIcon } from "lucide-react";
+import { LucideSave, PlusSquare, SaveAll, SaveIcon } from "lucide-react";
 import { useStore } from "../store";
 import useAuth from "../hooks/useAuth";
 import { useSavePipeline } from "../hooks/useSavePipeline";
@@ -26,7 +26,7 @@ export const SavePipelineButton = ({ isDrawer, styles, onOpenChange }) => {
   return (
     <div className="flex flex-col gap-2 w-full">
       {shareToken && (
-        <div className="flex flex-row gap-2">
+        <div className="flex md:flex-row flex-col sm:gap-2 gap-1">
           <button
             onClick={() => handleSave(false)}
             className={`${isDrawer ? styles : "flex items-center gap-1 text-canvas-ink rounded text-[10px] sm:text-xs font-medium px-2 py-1 sm:px-2 sm:py-1 w-full"}`}
@@ -37,9 +37,9 @@ export const SavePipelineButton = ({ isDrawer, styles, onOpenChange }) => {
 
           <button
             onClick={() => handleSave(true)}
-            className={`${isDrawer ? styles : "flex items-center gap-1 text-canvas-ink rounded text-[10px] sm:text-xs font-medium px-2 py-1 sm:px-2 sm:py-1 w-full whitespace-nowrap"}`}
+            className={`${isDrawer ? styles : "items-center gap-1 text-canvas-ink rounded text-[10px] sm:text-xs font-medium px-2 py-1 sm:px-2 sm:py-1 w-full whitespace-nowrap hidden md:flex"}`}
           >
-            <SaveIcon className="h-6 sm:h-5 w-6 sm:w-5" />
+            <PlusSquare className="h-6 sm:h-5 w-6 sm:w-5" />
             <span className={!isDrawer && "hidden md:block w-fit"}>Save As New</span>
           </button>
         </div>
@@ -53,6 +53,7 @@ export const SavePipelineButton = ({ isDrawer, styles, onOpenChange }) => {
           <SaveIcon className="h-6 sm:h-5 w-6 sm:w-5" />
           <span className={!isDrawer && "hidden md:block"}>Save</span>
         </button>
+
       )}
     </div>
   );
