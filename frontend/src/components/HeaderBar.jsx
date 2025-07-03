@@ -9,6 +9,7 @@ import DownloadDrawer from "./DownloadDrawer";
 import { MoreVerticalIcon } from "lucide-react";
 import PipelineNameInput from "./PipelineNameInput";
 import DashboardButton from "./DashboardButton";
+import UndoRedoButtons from "./UndoRedo";
 
 export const HeaderBar = ({ reactFlowWrapper }) => {
   const { user } = useAuth();
@@ -21,27 +22,31 @@ export const HeaderBar = ({ reactFlowWrapper }) => {
   };
 
   return (
-    <div className="fixed top-4 left-1/2 -translate-x-1/2 md:left-auto md:right-4 md:translate-x-0 z-30 flex justify-between md:w-fit w-auto items-center bg-white sm:px-5 px-3 py-2 rounded-md shadow-md sm:gap-2 align-middle">
+    <div className="fixed top-4 left-1/2 -translate-x-1/2 md:left-auto md:right-4 md:translate-x-0 z-30 flex justify-between md:w-fit w-auto items-center bg-white sm:px-5 px-3 py-2 rounded-md shadow-md gap-2 align-middle">
 
       <div className="hidden sm:flex">
         <PipelineNameInput />
       </div>
 
-      <div className="flex items-center sm:gap-1">
+      <UndoRedoButtons />
+
+      <div className="flex items-center">
         <SavePipelineButton />
         <ShareButton />
         <DownloadButton flowRef={reactFlowWrapper} />
 
-        <div className="hidden md:block">
-          <DashboardButton />
-        </div>
+        {user &&
+          <div className="hidden md:block">
+            <DashboardButton />
+          </div>}
+
 
         <div className="hidden md:block">
           <AuthButton />
         </div>
 
         {user && (
-          <div className="flex relative items-center gap-2 mx-2">
+          <div className="flex relative items-center mx-2">
             <div className="relative">
               <div className="w-8 h-8 rounded-full bg-canvas-sky flex items-center justify-center font-bold text-canvaPurple cursor-pointer peer">
                 {getInitial()}

@@ -17,10 +17,7 @@ export const PipelineToolbar = () => {
         className={`
           hidden md:flex flex-col justify-between
           ${collapsed ? "w-14" : "w-40"}
-          h-full bg-white border-r shadow-md rounded-lg mt-20 ml-4 md:m-4 px-2 py-1
-          transition-all duration-500 ease-in-out
-          overflow-hidden
-        `}
+          h-full bg-white border-r shadow-md rounded-lg mt-20 ml-4 md:m-4 px-2 py-1 transition-all duration-500 ease-in-out overflow-hidden`}
       >
         <div className="flex flex-col h-full">
           <div className="flex justify-between items-start mb-2">

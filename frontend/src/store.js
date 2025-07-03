@@ -16,9 +16,18 @@ export const useStore = create((set, get) => ({
   isAutoSaved: false,
   canEdit: true,
 
+  history: {
+    past: [],
+    present: { nodes: [], edges: [] },
+    future: [],
+  },
+
   setCanEdit: (flag) => set({ canEdit: flag }),
-  setNodes: (nodes) => set({ nodes }),
-  setEdges: (edges) => set({ edges }),
+  setPipelineId: (id) => set({ currentPipelineId: id }),
+  setAuthModalOpen: (isOpen) => set({ isAuthModalOpen: isOpen }),
+  setShareModalOpen: (isOpen) => set({ isShareModalOpen: isOpen }),
+  setCurrentPipelineName: (name) => set({ currentPipelineName: name }),
+  setAutoSaved: (isSaved) => set({ isAutoSaved: isSaved }),
 
   getNodeID: (type) => {
     const newIDs = { ...get().nodeIDs };
@@ -30,100 +39,162 @@ export const useStore = create((set, get) => ({
     return `${type}-${newIDs[type]}`;
   },
 
-  addNode: (node) => {
+  saveToHistory: (nodes, edges) => {
+    const { history } = get();
+    const safeNodes = Array.isArray(nodes) ? nodes : get().nodes;
+    const safeEdges = Array.isArray(edges) ? edges : get().edges;
+
+    const newPast = [...history.past, history.present];
+    const newPresent = { nodes: [...safeNodes], edges: [...safeEdges] };
+
     set({
-      nodes: [...get().nodes, node],
+      history: {
+        past: newPast,
+        present: newPresent,
+        future: [],
+      },
     });
+  },
+
+  setNodes: (nodes) => {
+    set({ nodes });
+    get().saveToHistory(nodes, get().edges);
+  },
+  setEdges: (edges) => {
+    set({ edges });
+    get().saveToHistory(get().nodes, edges);
+  },
+  setNodesAndEdges: (nodes, edges) => {
+    set({ nodes, edges });
+    get().saveToHistory(nodes, edges);
+  },
+
+  addNode: (node) => {
+    const newNodes = [...get().nodes, node];
+    set({ nodes: newNodes });
+    get().saveToHistory(newNodes, get().edges);
   },
 
   onNodesChange: (changes) => {
-    set({
-      nodes: applyNodeChanges(changes, get().nodes),
-    });
-  },
-
-  onEdgesChange: (changes) => {
-    set({
-      edges: applyEdgeChanges(changes, get().edges),
-    });
-  },
-
-  onConnect: (connection) => {
-    set({
-      edges: addEdge(
-        {
-          ...connection,
-          id: `e-${connection.source}-${connection.target}-${Date.now()}`,
-          type: "custom", 
-          data: {
-            disconnectEdge: get().disconnectEdge,
-          },
-          animated: true,
-          markerEnd: {
-            type: MarkerType.Arrow,
-            height: 10,
-            width: 10,
-            color: "#302d34",
-          },
-          style: {
-            stroke: "#302d34",
-            strokeWidth: 1,
-            strokeDasharray: "15 4",
-          },
-        },
-        get().edges
-      ),
-    });
+    const newNodes = applyNodeChanges(changes, get().nodes);
+    set({ nodes: newNodes });
+    get().saveToHistory(newNodes, get().edges);
   },
 
   updateNodeField: (nodeId, fieldName, fieldValue) => {
-    set({
-      nodes: get().nodes.map((node) =>
-        node.id === nodeId
-          ? { ...node, data: { ...node.data, [fieldName]: fieldValue } }
-          : node
-      ),
-    });
+    const newNodes = get().nodes.map((node) =>
+      node.id === nodeId
+        ? { ...node, data: { ...node.data, [fieldName]: fieldValue } }
+        : node
+    );
+    set({ nodes: newNodes });
+    get().saveToHistory(newNodes, get().edges);
   },
 
-  addEdgeManually: (connection) => {
-    set({
-      edges: addEdge(
-        {
-          id: `e-${connection.source}-${connection.target}-${Date.now()}`,
-          ...connection,
-          type: "custom", 
-          data: {
-            disconnectEdge: get().disconnectEdge,
-          },
-          animated: true,
-          markerEnd: {
-            type: MarkerType.Arrow,
-            height: 10,
-            width: 10,
-            color: "#302d34",
-          },
-          style: {
-            stroke: "#302d34",
-            strokeWidth: 1,
-            strokeDasharray: "15 4",
-          },
+  onEdgesChange: (changes) => {
+    const newEdges = applyEdgeChanges(changes, get().edges);
+    set({ edges: newEdges });
+    get().saveToHistory(get().nodes, newEdges);
+  },
+
+  onConnect: (connection) => {
+    const newEdges = addEdge(
+      {
+        ...connection,
+        id: `e-${connection.source}-${connection.target}-${Date.now()}`,
+        type: "custom",
+        data: { disconnectEdge: get().disconnectEdge },
+        animated: true,
+        markerEnd: {
+          type: MarkerType.Arrow,
+          height: 10,
+          width: 10,
+          color: "#302d34",
         },
-        get().edges
-      ),
-    });
+        style: {
+          stroke: "#302d34",
+          strokeWidth: 1,
+          strokeDasharray: "15 4",
+        },
+      },
+      get().edges
+    );
+
+    set({ edges: newEdges });
+    get().saveToHistory(get().nodes, newEdges);
   },
 
   disconnectEdge: (edgeId) => {
+    const newEdges = get().edges.filter((edge) => edge.id !== edgeId);
+    set({ edges: newEdges });
+    get().saveToHistory(get().nodes, newEdges);
+  },
+
+  addEdgeManually: (connection) => {
+    const newEdges = addEdge(
+      {
+        id: `e-${connection.source}-${connection.target}-${Date.now()}`,
+        ...connection,
+        type: "custom",
+        data: { disconnectEdge: get().disconnectEdge },
+        animated: true,
+        markerEnd: {
+          type: MarkerType.Arrow,
+          height: 10,
+          width: 10,
+          color: "#302d34",
+        },
+        style: {
+          stroke: "#302d34",
+          strokeWidth: 1,
+          strokeDasharray: "15 4",
+        },
+      },
+      get().edges
+    );
+
+    set({ edges: newEdges });
+    get().saveToHistory(get().nodes, newEdges);
+  },
+
+  undo: () => {
+    const { history } = get();
+    if (history.past.length === 0) return;
+
+    const previous = history.past[history.past.length - 1];
+    const newPast = history.past.slice(0, history.past.length - 1);
+    const newFuture = [history.present, ...history.future];
+
     set({
-      edges: get().edges.filter((edge) => edge.id !== edgeId),
+      nodes: previous.nodes,
+      edges: previous.edges,
+      history: {
+        past: newPast,
+        present: previous,
+        future: newFuture,
+      },
     });
   },
 
-  setPipelineId: (id) => set({ currentPipelineId: id }),
-  setNodesAndEdges: (nodes, edges) => set({ nodes, edges }),
-  setAuthModalOpen: (isOpen) => set({ isAuthModalOpen: isOpen }),
-  setShareModalOpen: (isOpen) => set({ isShareModalOpen: isOpen }),
-  setCurrentPipelineName: (name) => set({ currentPipelineName: name }),
-  setAutoSaved: (isSaved) => set({ isAutoSaved: isSaved }),
+  redo: () => {
+    const { history } = get();
+    if (history.future.length === 0) return;
+
+    const next = history.future[0];
+    const newFuture = history.future.slice(1);
+    const newPast = [...history.past, history.present];
+
+    set({
+      nodes: next.nodes,
+      edges: next.edges,
+      history: {
+        past: newPast,
+        present: next,
+        future: newFuture,
+      },
+    });
+  },
+
+  canUndo: () => get().history.past.length > 0,
+  canRedo: () => get().history.future.length > 0,
 }));
