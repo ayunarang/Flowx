@@ -2,13 +2,14 @@ import { RefreshCwIcon } from "lucide-react";
 import { useStore } from "../store";
 
 
-const ResetButton = ({isDrawer, styles}) => {
+const ResetButton = ({isDrawer, styles, onOpenChange}) => {
     const setNodes = useStore((state) => state.setNodes)
     const setEdges = useStore((state) => state.setEdges)
 
     const handleReset = () => {
         setNodes([])
         setEdges([])
+        onOpenChange(false);
     }
     return (
         <button

@@ -96,7 +96,7 @@ export const PipelineToolbar = () => {
       <div
         className={`
           md:hidden fixed bottom-0 left-0 right-0 bg-[#faf7ff] border-t shadow-md
-          flex items-center overflow-x-auto px-2 py-1.5`}
+          flex items-center overflow-x-auto md:px-2 px-0 pt-0 pb-0.5 md:py-1.5`}
       >
         {[
           ["customInput", "Input"],

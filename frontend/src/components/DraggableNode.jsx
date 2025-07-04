@@ -20,7 +20,7 @@ export const DraggableNode = ({ type, label, collapsed = false }) => {
     rounded-md md:border md:border-gray-200 gap-2
     md:bg-white bg-[#faf7ff] text-black
     ${collapsed
-          ? 'md:p-0 py-2 px-1 min-w-20 md:min-w-fit max-w-fit md:w-fit text-center'
+          ? 'md:p-0 py-2 px-1 min-w-[70px] md:min-w-fit max-w-fit md:w-fit text-center'
           : 'p-1.5 md:min-w-fit'
         }
     text-xs font-medium md:shadow-subtle
@@ -64,7 +64,7 @@ export const DraggableNode = ({ type, label, collapsed = false }) => {
       </div>
 
       {collapsed ? (
-        <span className="text-sm md:text-xs text-center md:hidden whitespace-nowrap text-canvas-ink">{label}</span>
+        <span className="text-xs md:text-xs text-center md:hidden whitespace-nowrap text-canvas-ink">{label}</span>
       ) : (
         <span className="leading-none break-words text-canvas-ink">{label}</span>
       )}

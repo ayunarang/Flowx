@@ -32,6 +32,7 @@ export default function MoreOptionsDrawer({
     setNodes([])
     setEdges([])
     navigate("/")
+    onOpenChange(false);
   }
 
   return (
@@ -63,7 +64,7 @@ export default function MoreOptionsDrawer({
                   New Pipeline
                 </button>
 
-                <ResetButton isDrawer styles={styles} />
+                <ResetButton isDrawer styles={styles} onOpenChange={onOpenChange}/>
 
                 <ShareButton isDrawer styles={styles} onOpenChange={onOpenChange} />
 
@@ -73,7 +74,7 @@ export default function MoreOptionsDrawer({
               <>
                 <AuthButton isDrawer styles={styles} onOpenChange={onOpenChange} />
                 <SavePipelineButton isDrawer styles={styles} onOpenChange={onOpenChange} />
-                <ResetButton isDrawer styles={styles} />
+                <ResetButton isDrawer styles={styles} onOpenChange={onOpenChange}/>
                 <ShareButton isDrawer styles={styles} onOpenChange={onOpenChange} />
               </>
             )}
