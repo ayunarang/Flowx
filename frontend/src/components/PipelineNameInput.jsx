@@ -68,20 +68,20 @@ export default function PipelineNameInput() {
       {canEdit && (
         <>
           <p
-            className={`text-xs flex font-normal sm:mr-3 mb-3 sm:mb-0 ${isAutoSaved ? "text-blue-600" : "text-gray-400"
+            className={`text-xs flex font-normal sm:mr-3 mb-3 sm:mb-0 ${isAutoSaved ? "text-blue-600" : "text-gray-500"
               }`}
           >
             {isAutoSaved ? "Saved" : "Idle"}
           </p>
 
-          <div className="relative flex items-center w-[75%] sm:w-fit">
+          <div className="relative flex items-center w-[75%] sm:w-fit gap-1">
             <input
               type="text"
               value={currentPipelineName}
               onChange={(e) => setCurrentPipelineName(e.target.value)}
               placeholder="Pipeline name"
               readOnly={!isEditing}
-              className={`font-semibold px-2 py-2 sm:py-1 border border-gray-400 focus:outline-none bg-transparent sm:text-sm sm:min-w-36 w-full max-w-full ${isEditing ? "text-black" : "text-gray-500 cursor-not-allowed"
+              className={`font-semibold px-2 py-2 sm:py-1 border border-gray-400 focus:outline-none bg-transparent sm:text-sm sm:min-w-36 w-full max-w-full ${isEditing ? "text-black" : "text-gray-500 cursor-not-allowed bg-white"
                 }`}
             />
 
@@ -89,12 +89,14 @@ export default function PipelineNameInput() {
               onClick={handleEditClick}
               type="button"
               className="absolute right-0.5 top-1/2-translate-y-1/2w-10 h-7 bg-white flex items-center justify-center text-gray-5 hover:text-black transition-colors"
+              title={isEditing ? "Save" : "Edit"}
             >
               {isEditing ? (
-                <CheckLineIcon className="w-4 h-4 mx-2.5" />
+                <CheckLineIcon className="w-4 h-4 mx-2" />
               ) : (
-                <Pencil className="w-4 h-4 mx-2.5" />
+                <Pencil className="w-4 h-4 mx-2" />
               )}
+
             </button>
 
           </div>

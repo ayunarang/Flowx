@@ -10,6 +10,7 @@ import { MoreVerticalIcon } from "lucide-react";
 import PipelineNameInput from "./PipelineNameInput";
 import DashboardButton from "./DashboardButton";
 import UndoRedoButtons from "./UndoRedo";
+import ResetButton from "./ResetButton";
 
 export const HeaderBar = ({ reactFlowWrapper }) => {
   const { user } = useAuth();
@@ -22,11 +23,13 @@ export const HeaderBar = ({ reactFlowWrapper }) => {
   };
 
   return (
-    <div className="fixed top-4 left-1/2 -translate-x-1/2 md:left-auto md:right-4 md:translate-x-0 z-30 flex justify-between md:w-fit w-auto items-center bg-white sm:px-5 px-3 py-2 rounded-md shadow-md gap-2 align-middle">
+    <div className="fixed top-4 left-1/2 -translate-x-1/2 md:left-auto md:right-4 md:translate-x-0 z-30 flex justify-between md:w-fit w-auto items-center bg-[#faf7ff] sm:px-5 px-3 py-2 rounded-md shadow-md gap-2 align-middle">
 
       <div className="hidden sm:flex">
         <PipelineNameInput />
       </div>
+
+      <ResetButton/> 
 
       <UndoRedoButtons />
 
