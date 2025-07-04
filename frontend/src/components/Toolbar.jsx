@@ -58,8 +58,8 @@ export const PipelineToolbar = () => {
             className=" text-canvaPurple px-3 py-1.5 rounded max-w-fit sm:w-auto md:flex gap-1 items-center text-xs mb-2 mt-1 hidden font-semibold bg-[#f0ecfc] hover:bg-[#ede8fb] active:bg-[#ede8fb] transition-all ease-in-out"
             onClick={handleNewPipeline}
           >
-            <span className="">New Pipeline</span>
-            <PlusIcon height={14} width={14} className="font-bold" />
+            <span className={collapsed? 'hidden': 'block'}>New Pipeline</span>
+            <PlusIcon className={`${!collapsed? 'w-4 h-4': 'w-6 h-6'} font-medium`} />
           </button>
 
           <div className="flex flex-col gap-3 transition-all duration-500 ease-in-out">
