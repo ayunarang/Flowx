@@ -64,7 +64,7 @@ export default function PipelineNameInput() {
   };
 
   return (
-    <div className="items-start sm:items-center flex flex-col sm:flex-row sm:mb-0 mb-2">
+    <div className="items-start sm:items-center sm:flex flex-col sm:flex-row sm:mb-0 mb-2 hidden">
       {canEdit && (
         <>
           <p

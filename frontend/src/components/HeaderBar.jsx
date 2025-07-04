@@ -25,11 +25,12 @@ export const HeaderBar = ({ reactFlowWrapper }) => {
   return (
     <div className="fixed top-4 left-1/2 -translate-x-1/2 md:left-auto md:right-4 md:translate-x-0 z-30 flex justify-between md:w-fit w-auto items-center bg-[#faf7ff] sm:px-5 px-3 py-2 rounded-md shadow-md gap-2 align-middle">
 
-      <div className="hidden sm:flex">
+      {user &&
         <PipelineNameInput />
-      </div>
+      }
 
-      <ResetButton/> 
+
+      <ResetButton />
 
       <UndoRedoButtons />
 
